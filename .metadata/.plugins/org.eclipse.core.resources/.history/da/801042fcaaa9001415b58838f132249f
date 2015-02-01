@@ -3,7 +3,7 @@ package Maze_Setup;
 public class Room {
 	private Door north, south, east, west;
 	boolean exit = false;
-
+	
 	public Door getNorth() {
 		return north;
 	}
@@ -35,27 +35,22 @@ public class Room {
 	public void setWest(Door west) {
 		this.west = west;
 	}
-
 	public boolean isExit() {
 		return exit;
 	}
-
 	public void setExit() {
 		this.exit = true;
-	}
-
+	}	
+	
 	public void lockNorth() {
 		this.north.lock();
 	}
-
 	public void lockSouth() {
 		this.south.lock();
 	}
-
 	public void lockWest() {
 		this.west.lock();
 	}
-
 	public void lockEast() {
 		this.east.lock();
 	}
