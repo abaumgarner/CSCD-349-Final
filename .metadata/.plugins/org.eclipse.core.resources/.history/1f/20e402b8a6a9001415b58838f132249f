@@ -34,9 +34,7 @@ public class MazeTester {
 				System.out.println("Wrong input, moron");
 			}
 			if (!maze.mazeTraversal()) {
-				System.out.println(maze.toString());
 				System.out.println("MAZE CAN NO LONGER BE TRAVERSED");
-
 				System.exit(0);
 			}
 		}
