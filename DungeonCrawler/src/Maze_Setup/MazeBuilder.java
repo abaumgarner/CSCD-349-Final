@@ -33,7 +33,24 @@ public class MazeBuilder {
 			}
 		}
 		this.doorSetup(rooms);
-		rooms[this.dimension - 1][this.dimension - 1].setExit();
+		
+		rooms = randomlyPlaceExit(rooms);
+		//rooms[this.dimension - 1][this.dimension - 1].setExit();
+		
+		return rooms;
+	}
+
+	private Room[][] randomlyPlaceExit(Room[][] rooms) {
+		Random rand = new Random();
+		int randomX, randomY;
+		
+		do{
+			randomX = rand.nextInt((this.dimension - (this.dimension - 5)) - 1);
+			randomY = rand.nextInt((this.dimension - (this.dimension - 5)) - 1);
+		}while(randomX < 2);
+		
+		rooms[randomX][randomY].setExit();
+		
 		return rooms;
 	}
 

@@ -50,7 +50,7 @@ public class Maze {
 				else
 					maze += "|";
 				if (this.rooms[i][j].isExit())
-					maze += "E";
+					maze += " ";
 				else if (i == this.playerRow && j == this.playerCol)
 					maze += "P";
 				else
@@ -142,7 +142,7 @@ public class Maze {
 		return grid[this.dimension - 1][this.dimension - 1];
 	}
 
-	public void mazeTraversalHelper(int row, int col, boolean grid[][]) {
+	private void mazeTraversalHelper(int row, int col, boolean grid[][]) {
 		Room curRoom = this.rooms[row][col];
 		grid[row][col] = true;
 		if (curRoom.isExit())

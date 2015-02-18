@@ -43,7 +43,7 @@ public class Room {
 	public void setExit() {
 		this.exit = true;
 	}
-
+	
 	public void lockNorth() {
 		this.north.lock();
 	}
