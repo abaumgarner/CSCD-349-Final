@@ -5,13 +5,16 @@
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.ArrayList;
 
 public class GameSession
 {
    final int PARTYSIZE = 3;
    private String classes [] = {"","Warrior","Mage","Ranger","Cleric"};
+   private ArrayList<Character> party = new ArrayList<Character>();
    private boolean gameOver;
    Scanner input;
+   
    
    public GameSession(Scanner scan)
    {
@@ -28,10 +31,33 @@ public class GameSession
    
    public boolean isGameOver()
    {
-      if(this.gameOver)
-         return true;
-      return false;
+      if(partyDead(party))
+      {
+         gameOver = true;
+         return gameOver;
+      }//end if
+      else if(foundExit())
+      {
+         gameOver = true;
+         return gameOver;
+      }//end else if
+         
+      gameOver = false;
+      return gameOver;
    }//end isGameOver
+   
+   public boolean partyDead(ArrayList<Character> party)
+   {
+      if(party.size() == 0)
+         return true;
+      else
+         return false;
+   }//end partyDead
+   
+   public boolean foundExit()
+   {
+      return false;
+   }//end foundExit
       
    private void generateParty()
    {
@@ -44,6 +70,14 @@ public class GameSession
       {
          name = getCharacterName(input);
          classList = getCharacterClass(name);
+         Character partyMember;
+         if(classList.compareTo("Warrior") == 0)
+         {
+            partyMember = new Warrior();
+            partyMember.setName(name);
+            party.add(partyMember);
+         }//end if
+         
          System.out.println("\n" + name + " the " + classList + " joined the party.\n");
          count++;
       }//end while
@@ -101,6 +135,18 @@ public class GameSession
       }//end while
       return name;  
    }//end getCharacterName
+   
+   public void displayPartyInfo()
+   {
+      System.out.println("/nPARTY STATUS:\n");
+      for(Character partyMember: party)
+      {
+         System.out.print("PARTY MEMBER: " + partyMember.getName() + " ");
+         System.out.print("LVL: " + partyMember.getLevel());
+         System.out.print("HP: " + partyMember.getCurrentHP() + "/" + partyMember.getMaxHP());
+         System.out.println();
+      }//end for 
+   }//end displayPartyInfo
    	
    private void printSplash()
    {
@@ -149,7 +195,7 @@ public class GameSession
       System.out.println("surround you splintered, rotted and riddled with markings from ages long since");
       System.out.println("past. It is clear that finding an exit will not be easy...\n");
       System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
-   }//end intro
+   }//end roomDesc
    
    public String navigate()
    {
@@ -187,5 +233,5 @@ public class GameSession
       matches = matcher.matches();
       	
       return matches;
-   }
+   }//end regexCheck
 }//end GameSession

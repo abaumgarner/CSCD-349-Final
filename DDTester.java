@@ -13,9 +13,13 @@ public class DDTester
       game.titleScreen();
       game.newGame();
       
+      MazeBuilder builder = new MazeBuilder(5);
+		Maze maze = builder.build();
+      
+      //background music objects
       SFX caveBGM = new SFX("./Resources/BGM/cave.wav");
       SFX battleBGM = new SFX("./Resources/BGM/battle.wav");
-      
+      //sound effect objects
       SFX footstepsSFX = new SFX("./Resources/SFX/footsteps.wav");
       SFX attackSFX = new SFX("./Resources/SFX/attack.wav");
       SFX hurtSFX = new SFX("./Resources/SFX/hurt.wav");
@@ -26,10 +30,11 @@ public class DDTester
       
       while(!game.isGameOver())
       {
+         System.out.println(maze.toString());
+         game.displayPartyInfo();
          String str = game.navigate();
          footstepsSFX.play();
       }//end while
-      
    }//end main
 }//end class
    
