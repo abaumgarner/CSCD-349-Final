@@ -1,3 +1,4 @@
+package Character;
 
 class Warrior extends Hero{
 

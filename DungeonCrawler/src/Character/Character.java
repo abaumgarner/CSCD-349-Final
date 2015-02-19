@@ -1,3 +1,5 @@
+package Character;
+
 import java.util.ArrayList;
 import java.util.Random;
 

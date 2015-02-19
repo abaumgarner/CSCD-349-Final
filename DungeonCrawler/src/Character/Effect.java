@@ -1,3 +1,5 @@
+package Character;
+
 public abstract class Effect{
 	
 	protected int duration;
