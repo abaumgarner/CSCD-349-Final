@@ -1,11 +1,11 @@
 package Character;
 
-public class Warrior extends Hero{
+class Warrior extends Hero{
 
    public Warrior(){
   
       this.name = "NULL The Conqueror";
-      this.profession = "Warrior";
+   
       this.race = "Null'thraki";
       
       this.level = 1;

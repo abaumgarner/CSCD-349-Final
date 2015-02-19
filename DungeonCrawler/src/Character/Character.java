@@ -1,13 +1,12 @@
 package Character;
 
- import java.util.ArrayList;
+import java.util.ArrayList;
 import java.util.Random;
 
-public abstract class Character{
+public abstract class Character implements Comparable<Character>{
 
    protected String name;
    protected String race;
-   protected String profession;
    protected Boolean isAlive;
    
    protected double str, dex, wis, vit, initiative;
@@ -28,17 +27,6 @@ public abstract class Character{
    public String getName(){
    
       return this.name;
-   }
-   
-   public String getRace(){
-   
-      return this.race;
-   
-   }
-   
-   public String getProfession(){
-   
-      return this.profession;
    
    }
    
@@ -119,6 +107,7 @@ public abstract class Character{
    public void setLevel(int lvl){
    
       this.level = lvl;
+      
    }
 
    public void setExp(int exp){
@@ -256,5 +245,18 @@ public abstract class Character{
 	   this.isAlive = false;
    }
 
+   @Override
+   public int compareTo(Character other){
+	   
+	   if(this.initiative < other.initiative){
+		   return -1;
+	   }
+	   else if(this.initiative > other.initiative){
+		   return 1;
+	   }
+	   else{
+		   return 0;
+	   }
+   }
 
 }

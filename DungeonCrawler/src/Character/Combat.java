@@ -1,13 +1,18 @@
 package Character;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 
 public class Combat {
 	
 	private Boolean combatStarted;
 	private int roundCount;
-	private ArrayList<Character> TurnOrder;
+	private ArrayList<Character> turnOrder;
+	
+	public ArrayList<Character> getTurnOrder(){
+		return this.turnOrder;
+	}
 	
 	public Combat(ArrayList<Character> Heroes, ArrayList<Character> Monsters){
 		roundCount = 0;
@@ -88,6 +93,28 @@ public class Combat {
 					effect.remove(monster);
 				}
 			}
+		}
+	}
+	
+	public void organizeTurns(ArrayList<Character> Heroes, ArrayList<Character> Monsters){
+			
+			turnOrder = new ArrayList<Character>();
+		
+			turnOrder.addAll(Heroes);
+			turnOrder.addAll(Monsters);
+			
+			Collections.sort(turnOrder);
+	}
+	
+	public void setInitiatives(){
+		
+		if(this.turnOrder != null){
+			for(Character c : this.turnOrder){
+				c.calculateInitiative();
+			}
+		}
+		else{
+			System.out.println("turnOrder is null, can't calc initiatives.");
 		}
 	}
 
