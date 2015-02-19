@@ -1,5 +1,3 @@
-package Character;
-
 public class CharacterTester {
 
    public static void main(String[] args){

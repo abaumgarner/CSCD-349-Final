@@ -1,4 +1,3 @@
-package Character;
 
 public class Cripple extends Effect {
 	

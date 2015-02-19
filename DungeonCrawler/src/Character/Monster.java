@@ -1,5 +1,3 @@
-package Character;
-
 class Monster extends Character{
 
    public String getName(){
