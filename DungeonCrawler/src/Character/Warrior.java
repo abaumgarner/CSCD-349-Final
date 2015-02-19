@@ -1,6 +1,6 @@
 package Character;
 
-class Warrior extends Hero{
+public class Warrior extends Hero{
 
    public Warrior(){
   

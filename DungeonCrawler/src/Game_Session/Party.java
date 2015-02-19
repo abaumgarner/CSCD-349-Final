@@ -40,7 +40,7 @@ public class Party
       {
          System.out.println("\n============================");
          System.out.println("NAME: " + character.getName());
-         System.out.println("RACE: " + character.getRace());
+			System.out.println("RACE: " + character.getRace());
          System.out.println("CLASS: " + character.getProfession());
          System.out.println("LVL: " + character.getLevel());
          System.out.println("============================");

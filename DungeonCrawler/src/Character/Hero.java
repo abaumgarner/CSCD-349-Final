@@ -1,9 +1,5 @@
 package Character;
 
-abstract class Hero extends Character{
-
-   
-   
-   
+abstract class Hero extends Character {
 
 }
