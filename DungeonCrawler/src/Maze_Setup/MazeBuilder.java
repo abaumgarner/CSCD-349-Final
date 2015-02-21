@@ -18,7 +18,8 @@ public class MazeBuilder {
 
 		newMaze.setRooms(this.roomSetup());
 		newMaze.setDimension(this.dimension);
-		// this.randomLocks(newMaze);
+		this.randomLocks(newMaze);
+		this.lockBorder(newMaze);
 		return newMaze;
 	}
 
@@ -33,24 +34,23 @@ public class MazeBuilder {
 			}
 		}
 		this.doorSetup(rooms);
-		
+
 		rooms = randomlyPlaceExit(rooms);
-		//rooms[this.dimension - 1][this.dimension - 1].setExit();
-		
+
 		return rooms;
 	}
 
 	private Room[][] randomlyPlaceExit(Room[][] rooms) {
 		Random rand = new Random();
 		int randomX, randomY;
-		
-		do{
+
+		do {
 			randomX = rand.nextInt((this.dimension - (this.dimension - 5)) - 1);
 			randomY = rand.nextInt((this.dimension - (this.dimension - 5)) - 1);
-		}while(randomX < 2);
-		
+		} while (randomX < 2);
+
 		rooms[randomX][randomY].setExit();
-		
+
 		return rooms;
 	}
 
@@ -90,8 +90,9 @@ public class MazeBuilder {
 
 	private void randomLocks(Maze maze) {
 		Room[][] rooms = maze.getRooms();
-		int i, j;
 		Random gen = new Random();
+		int i, j;
+
 		for (i = 0; i < maze.getDimension(); i++)
 			for (j = 0; j < maze.getDimension(); j++) {
 				int rand = gen.nextInt(2);
@@ -106,6 +107,20 @@ public class MazeBuilder {
 					rooms[i][j].getWest().lock();
 				if (rand2 == 3)
 					rooms[i][j].getEast().lock();
+			}
+	}
+
+	private void lockBorder(Maze maze) {
+		Room[][] rooms = maze.getRooms();
+
+		int i, j;
+
+		for (i = 0; i < maze.getDimension(); i++)
+			for (j = 0; j < maze.getDimension(); j++) {
+				if (i == 0)
+					rooms[i][j].lockNorth();
+				if (j == 0)
+					rooms[i][j].lockWest();
 			}
 	}
 }

@@ -33,8 +33,8 @@ public class Maze {
 	public String toString() {
 		String maze = "";
 		int i, j;
+
 		for (i = 0; i < this.rooms.length; i++) {
-			// build north doors
 			for (j = 0; j < this.rooms[i].length; j++) {
 				maze += "*";
 				if (this.rooms[i][j].getNorth().isLocked())
