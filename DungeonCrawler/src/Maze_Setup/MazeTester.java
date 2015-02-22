@@ -5,27 +5,41 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class MazeTester {
+	public static final String ANSI_RESET = "\u001B[0m";
+	public static final String ANSI_BLACK = "\u001B[30m";
+	public static final String ANSI_RED = "\u001B[31m";
+	public static final String ANSI_GREEN = "\u001B[32m";
+	public static final String ANSI_YELLOW = "\u001B[33m";
+	public static final String ANSI_BLUE = "\u001B[34m";
+	public static final String ANSI_PURPLE = "\u001B[35m";
+	public static final String ANSI_CYAN = "\u001B[36m";
+	public static final String ANSI_WHITE = "\u001B[37m";
+	
 	public static void main(String[] args) {
 		Scanner kb = new Scanner(System.in);
 		MazeBuilder builder = new MazeBuilder(5);
 		Maze maze = builder.build();
 
 		while (!maze.playerInExit()) {
-			System.out.println(maze.toString());
+			printMaze(maze);
 			System.out.println("w/a/s/d --> n/w/s/e\n");
 
 			char dir = kb.next().charAt(0);
 			switch (dir) {
 			case ('w'):
+				maze.getCurrentRoom().getNorth().open();
 				maze.moveNorth();
 				break;
 			case ('s'):
+				maze.getCurrentRoom().getSouth().open();
 				maze.moveSouth();
 				break;
 			case ('a'):
+				maze.getCurrentRoom().getWest().open();
 				maze.moveWest();
 				break;
 			case ('d'):
+				maze.getCurrentRoom().getEast().open();
 				maze.moveEast();
 				break;
 			case ('l'):
@@ -35,12 +49,67 @@ public class MazeTester {
 				System.out.println("Wrong input, moron");
 			}
 			if (!maze.mazeTraversal()) {
-				System.out.println(maze.toString());
+				printMaze(maze);
 				System.out.println("MAZE CAN NO LONGER BE TRAVERSED");
 
 				System.exit(0);
 			}
 		}
+	}
+
+	private static void printMaze(Maze maze) {
+		int i, j;
+		Room [][] rooms = maze.getRooms();
+		
+		
+		for (i = 0; i < rooms.length; i++) {
+			for (j = 0; j < rooms[i].length; j++) {
+				System.out.print(ANSI_RED + "*" + ANSI_RESET);
+				if (rooms[i][j].getNorth().isLocked())
+					System.out.print(ANSI_RED + "x" + ANSI_RESET);
+				else if(rooms[i][j].getNorth().isOpen())
+					System.out.print(ANSI_BLUE + "-" + ANSI_RESET);
+				else
+					System.out.print(ANSI_YELLOW + "-" + ANSI_RESET);
+			}
+
+			System.out.print(ANSI_RED + "*\n" + ANSI_RESET);
+			for (j = 0; j < rooms[i].length; j++) {
+				if (rooms[i][j].getWest().isLocked())
+					System.out.print(ANSI_RED + "x" + ANSI_RESET);
+				else if(rooms[i][j].getWest().isOpen())
+					System.out.print(ANSI_BLUE + "|" + ANSI_RESET);
+				else
+					System.out.print(ANSI_YELLOW + "|" + ANSI_RESET);
+				
+				if (rooms[i][j].isExit())
+					System.out.print(" ");
+				else if (i == maze.playerRow && j == maze.playerCol)
+					System.out.print(ANSI_WHITE + "P" + ANSI_RESET);
+				else
+					System.out.print(" ");
+				System.out.print("");
+			}
+			if (rooms[i][j - 1].getEast().isLocked())
+				System.out.print(ANSI_RED + "x" + ANSI_RESET);
+			else if(rooms[i][j - 1].getEast().isOpen())
+				System.out.print(ANSI_BLUE + "|" + ANSI_RESET);
+			else
+				System.out.print(ANSI_YELLOW + "|" + ANSI_RESET);
+			
+			System.out.print("\n");
+		}
+		for (j = 0; j < rooms[0].length; j++) {
+			System.out.print(ANSI_RED + "*" + ANSI_RESET);
+			if (rooms[rooms.length - 1][j].getSouth().isLocked())
+				System.out.print(ANSI_RED + "x" + ANSI_RESET);
+			else if(rooms[rooms.length - 1][j].getSouth().isOpen())
+				System.out.print(ANSI_BLUE + "-" + ANSI_RESET);
+			else
+				System.out.print(ANSI_YELLOW + "-" + ANSI_RESET);
+		}
+		System.out.print(ANSI_RED + "*\n" + ANSI_RESET);
+				
 	}
 
 	private static void lockOut(Maze maze) {
