@@ -1,7 +1,5 @@
 package Maze_Setup;
 
-import java.util.ArrayList;
-import java.util.Random;
 import java.util.Scanner;
 
 public class MazeTester {
@@ -67,7 +65,6 @@ public class MazeTester {
 		int i, j;
 		Room [][] rooms = maze.getRooms();
 		
-		
 		for (i = 0; i < rooms.length; i++) {
 			for (j = 0; j < rooms[i].length; j++) {
 				System.out.print(lockedColor + "*" + ANSI_RESET);
@@ -96,6 +93,7 @@ public class MazeTester {
 					System.out.print(" ");
 				System.out.print("");
 			}
+			
 			if (rooms[i][j - 1].getEast().isLocked())
 				System.out.print(lockedColor + "x" + ANSI_RESET);
 			else if(rooms[i][j - 1].getEast().isOpen())
@@ -116,6 +114,10 @@ public class MazeTester {
 		}
 		System.out.print(lockedColor + "*\n" + ANSI_RESET);
 				
+	}
+	
+	private void printHelper() {
+		
 	}
 
 	private static void lockOut(Maze maze) {
