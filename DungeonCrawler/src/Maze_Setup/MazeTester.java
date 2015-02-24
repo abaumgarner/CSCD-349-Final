@@ -5,15 +5,21 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class MazeTester {
-	public static final String ANSI_RESET = "\u001B[0m";
-	public static final String ANSI_BLACK = "\u001B[30m";
-	public static final String ANSI_RED = "\u001B[31m";
-	public static final String ANSI_GREEN = "\u001B[32m";
-	public static final String ANSI_YELLOW = "\u001B[33m";
-	public static final String ANSI_BLUE = "\u001B[34m";
-	public static final String ANSI_PURPLE = "\u001B[35m";
-	public static final String ANSI_CYAN = "\u001B[36m";
-	public static final String ANSI_WHITE = "\u001B[37m";
+	private static final String ANSI_RESET = "\u001B[0m";
+	private static final String ANSI_BLACK = "\u001B[30m";
+	private static final String ANSI_RED = "\u001B[31m";
+	private static final String ANSI_GREEN = "\u001B[32m";
+	private static final String ANSI_YELLOW = "\u001B[33m";
+	private static final String ANSI_BLUE = "\u001B[34m";
+	private static final String ANSI_PURPLE = "\u001B[35m";
+	private static final String ANSI_CYAN = "\u001B[36m";
+	private static final String ANSI_WHITE = "\u001B[37m";
+	
+	private static String lockedColor = ANSI_CYAN;
+	private static String openColor = ANSI_BLUE;
+	private static String closedColor = ANSI_YELLOW;
+	private static String playerColor = ANSI_WHITE;
+			
 	
 	public static void main(String[] args) {
 		Scanner kb = new Scanner(System.in);
@@ -64,51 +70,51 @@ public class MazeTester {
 		
 		for (i = 0; i < rooms.length; i++) {
 			for (j = 0; j < rooms[i].length; j++) {
-				System.out.print(ANSI_RED + "*" + ANSI_RESET);
+				System.out.print(lockedColor + "*" + ANSI_RESET);
 				if (rooms[i][j].getNorth().isLocked())
-					System.out.print(ANSI_RED + "x" + ANSI_RESET);
+					System.out.print(lockedColor + "x" + ANSI_RESET);
 				else if(rooms[i][j].getNorth().isOpen())
-					System.out.print(ANSI_BLUE + "-" + ANSI_RESET);
+					System.out.print(openColor + "-" + ANSI_RESET);
 				else
-					System.out.print(ANSI_YELLOW + "-" + ANSI_RESET);
+					System.out.print(closedColor + "-" + ANSI_RESET);
 			}
 
-			System.out.print(ANSI_RED + "*\n" + ANSI_RESET);
+			System.out.print(lockedColor + "*\n" + ANSI_RESET);
 			for (j = 0; j < rooms[i].length; j++) {
 				if (rooms[i][j].getWest().isLocked())
-					System.out.print(ANSI_RED + "x" + ANSI_RESET);
+					System.out.print(lockedColor + "x" + ANSI_RESET);
 				else if(rooms[i][j].getWest().isOpen())
-					System.out.print(ANSI_BLUE + "|" + ANSI_RESET);
+					System.out.print(openColor + "|" + ANSI_RESET);
 				else
-					System.out.print(ANSI_YELLOW + "|" + ANSI_RESET);
+					System.out.print(closedColor + "|" + ANSI_RESET);
 				
 				if (rooms[i][j].isExit())
 					System.out.print(" ");
 				else if (i == maze.playerRow && j == maze.playerCol)
-					System.out.print(ANSI_WHITE + "P" + ANSI_RESET);
+					System.out.print(playerColor + "P" + ANSI_RESET);
 				else
 					System.out.print(" ");
 				System.out.print("");
 			}
 			if (rooms[i][j - 1].getEast().isLocked())
-				System.out.print(ANSI_RED + "x" + ANSI_RESET);
+				System.out.print(lockedColor + "x" + ANSI_RESET);
 			else if(rooms[i][j - 1].getEast().isOpen())
-				System.out.print(ANSI_BLUE + "|" + ANSI_RESET);
+				System.out.print(openColor + "|" + ANSI_RESET);
 			else
-				System.out.print(ANSI_YELLOW + "|" + ANSI_RESET);
+				System.out.print(closedColor + "|" + ANSI_RESET);
 			
 			System.out.print("\n");
 		}
 		for (j = 0; j < rooms[0].length; j++) {
-			System.out.print(ANSI_RED + "*" + ANSI_RESET);
+			System.out.print(lockedColor + "*" + ANSI_RESET);
 			if (rooms[rooms.length - 1][j].getSouth().isLocked())
-				System.out.print(ANSI_RED + "x" + ANSI_RESET);
+				System.out.print(lockedColor + "x" + ANSI_RESET);
 			else if(rooms[rooms.length - 1][j].getSouth().isOpen())
-				System.out.print(ANSI_BLUE + "-" + ANSI_RESET);
+				System.out.print(openColor + "-" + ANSI_RESET);
 			else
-				System.out.print(ANSI_YELLOW + "-" + ANSI_RESET);
+				System.out.print(closedColor + "-" + ANSI_RESET);
 		}
-		System.out.print(ANSI_RED + "*\n" + ANSI_RESET);
+		System.out.print(lockedColor + "*\n" + ANSI_RESET);
 				
 	}
 
