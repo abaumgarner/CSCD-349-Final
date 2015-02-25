@@ -3,6 +3,22 @@ package Maze_Setup;
 import java.awt.Point;
 
 public class Maze {
+	private final String ANSI_RESET = "\u001B[0m";
+	private final String ANSI_BLACK = "\u001B[30m";
+	private final String ANSI_RED = "\u001B[31m";
+	private final String ANSI_GREEN = "\u001B[32m";
+	private final String ANSI_YELLOW = "\u001B[33m";
+	private final String ANSI_BLUE = "\u001B[34m";
+	private final String ANSI_PURPLE = "\u001B[35m";
+	private final String ANSI_CYAN = "\u001B[36m";
+	private final String ANSI_WHITE = "\u001B[37m";
+
+	private String colorReset = ANSI_RESET;
+	private String lockedColor = ANSI_CYAN;
+	private String openColor = ANSI_BLUE;
+	private String closedColor = ANSI_YELLOW;
+	private String playerColor = ANSI_WHITE;
+
 	Room[][] rooms;
 	int dimension;
 
@@ -38,37 +54,46 @@ public class Maze {
 			for (j = 0; j < this.rooms[i].length; j++) {
 				maze += "*";
 				if (this.rooms[i][j].getNorth().isLocked())
-					maze += "x";
+					maze += lockedColor + "x" + colorReset;
+				else if(rooms[i][j].getNorth().isOpen())
+					maze += openColor + "-" + colorReset;
 				else
-					maze += "-";
+					maze += closedColor + "-" + colorReset;
 			}
 
 			maze += "*\n";
 			for (j = 0; j < this.rooms[i].length; j++) {
 				if (this.rooms[i][j].getWest().isLocked())
-					maze += "x";
+					maze += lockedColor +  "x" + colorReset;
+				else if(rooms[i][j].getWest().isOpen())
+					maze += openColor + "|" + colorReset;
 				else
-					maze += "|";
+					maze += closedColor + "|" + colorReset;
+				
 				if (this.rooms[i][j].isExit())
 					maze += " ";
 				else if (i == this.playerRow && j == this.playerCol)
-					maze += "P";
+					maze += playerColor +  "P" + colorReset;
 				else
 					maze += " ";
 				maze += "";
 			}
 			if (this.rooms[i][j - 1].getEast().isLocked())
-				maze += "x";
+				maze += lockedColor + "x" + colorReset;
+			else if(rooms[rooms.length - 1][j].getEast().isOpen())
+				maze += openColor + "-" + colorReset;
 			else
-				maze += "|";
+				maze += closedColor + "|" + colorReset;
 			maze += "\n";
 		}
 		for (j = 0; j < this.rooms[0].length; j++) {
-			maze += "*";
+			maze += "*";	
 			if (this.rooms[this.rooms.length - 1][j].getSouth().isLocked())
-				maze += "x";
+				maze += lockedColor + "x" + colorReset;
+			else if(rooms[rooms.length - 1][j].getSouth().isOpen())
+				maze += openColor + "-" + colorReset;
 			else
-				maze += "-";
+				maze += closedColor +  "-" + colorReset;
 		}
 		maze += "*\n";
 		return maze;
