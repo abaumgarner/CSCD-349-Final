@@ -20,7 +20,7 @@ public class MazeTester {
 	
 	public static void main(String[] args) {
 		Scanner kb = new Scanner(System.in);
-		MazeBuilder builder = new MazeBuilder(5);
+		MazeBuilder builder = new MazeBuilder(10);
 		Maze maze = builder.build();
 
 		while (!maze.playerInExit()) {

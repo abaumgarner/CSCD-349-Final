@@ -4,59 +4,59 @@ public class Room {
 	private Door north, south, east, west;
 	boolean exit = false;
 
-	public Door getNorth() {
+	Door getNorth() {
 		return north;
 	}
 
-	public void setNorth(Door north) {
+	void setNorth(Door north) {
 		this.north = north;
 	}
 
-	public Door getSouth() {
+	Door getSouth() {
 		return south;
 	}
 
-	public void setSouth(Door south) {
+	void setSouth(Door south) {
 		this.south = south;
 	}
 
-	public Door getEast() {
+	Door getEast() {
 		return east;
 	}
 
-	public void setEast(Door east) {
+	void setEast(Door east) {
 		this.east = east;
 	}
 
-	public Door getWest() {
+	Door getWest() {
 		return west;
 	}
 
-	public void setWest(Door west) {
+	void setWest(Door west) {
 		this.west = west;
 	}
 
-	public boolean isExit() {
+	boolean isExit() {
 		return exit;
 	}
 
-	public void setExit() {
+	void setExit() {
 		this.exit = true;
 	}
-	
-	public void lockNorth() {
+
+	void lockNorth() {
 		this.north.lock();
 	}
 
-	public void lockSouth() {
+	void lockSouth() {
 		this.south.lock();
 	}
 
-	public void lockWest() {
+	void lockWest() {
 		this.west.lock();
 	}
 
-	public void lockEast() {
+	void lockEast() {
 		this.east.lock();
 	}
 }
