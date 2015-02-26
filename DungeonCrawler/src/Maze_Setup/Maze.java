@@ -13,8 +13,8 @@ public class Maze {
 	private String playerColor = ansi.getANSI_WHITE();
 	int playerRow, playerCol;
 
-	Room[][] rooms;
-	int dimension;
+	private Room[][] rooms;
+	private int dimension;
 
 	public int getDimension() {
 		return dimension;

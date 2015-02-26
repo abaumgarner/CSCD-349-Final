@@ -18,8 +18,10 @@ public class MazeTester {
 	private static final String ANSI_WHITE = "\u001B[37m";
 	*/	
 	
+	private static Scanner kb;
+
 	public static void main(String[] args) {
-		Scanner kb = new Scanner(System.in);
+		kb = new Scanner(System.in);
 		MazeBuilder builder = new MazeBuilder(10);
 		Maze maze = builder.build();
 
@@ -119,7 +121,7 @@ public class MazeTester {
 	private static void lockOut(Maze maze) {
 		Room[][] rooms = maze.getRooms();
 
-		Room init = rooms[maze.dimension - 1][maze.dimension - 1];
+		Room init = rooms[maze.getDimension() - 1][maze.getDimension() - 1];
 		init.getNorth().lock();
 		init.getSouth().lock();
 		init.getWest().lock();
