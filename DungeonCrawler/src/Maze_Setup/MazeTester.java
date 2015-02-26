@@ -1,9 +1,13 @@
+/*
+ * Test class for the maze. Commented out sections were implemented in another class but tested here locally first.
+ * 
+ */
 package Maze_Setup;
 
 import java.util.Scanner;
 
 public class MazeTester {
-	private static final String ANSI_RESET = "\u001B[0m";
+	/*private static final String ANSI_RESET = "\u001B[0m";
 	private static final String ANSI_BLACK = "\u001B[30m";
 	private static final String ANSI_RED = "\u001B[31m";
 	private static final String ANSI_GREEN = "\u001B[32m";
@@ -12,12 +16,7 @@ public class MazeTester {
 	private static final String ANSI_PURPLE = "\u001B[35m";
 	private static final String ANSI_CYAN = "\u001B[36m";
 	private static final String ANSI_WHITE = "\u001B[37m";
-	
-	private static String lockedColor = ANSI_CYAN;
-	private static String openColor = ANSI_BLUE;
-	private static String closedColor = ANSI_YELLOW;
-	private static String playerColor = ANSI_WHITE;
-			
+	*/	
 	
 	public static void main(String[] args) {
 		Scanner kb = new Scanner(System.in);
@@ -25,7 +24,7 @@ public class MazeTester {
 		Maze maze = builder.build();
 
 		while (!maze.playerInExit()) {
-			printMaze(maze);
+			System.out.println(maze.toString());
 			System.out.println("w/a/s/d --> n/w/s/e\n");
 
 			char dir = kb.next().charAt(0);
@@ -53,14 +52,14 @@ public class MazeTester {
 				System.out.println("Wrong input, moron");
 			}
 			if (!maze.mazeTraversal()) {
-				printMaze(maze);
+				System.out.println(maze.toString());
 				System.out.println("MAZE CAN NO LONGER BE TRAVERSED");
 
 				System.exit(0);
 			}
 		}
 	}
-
+/*
 	private static void printMaze(Maze maze) {
 		int i, j;
 		Room [][] rooms = maze.getRooms();
@@ -115,10 +114,7 @@ public class MazeTester {
 		System.out.print(lockedColor + "*\n" + ANSI_RESET);
 				
 	}
-	
-	private void printHelper() {
-		
-	}
+	*/
 
 	private static void lockOut(Maze maze) {
 		Room[][] rooms = maze.getRooms();

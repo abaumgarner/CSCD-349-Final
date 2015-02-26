@@ -2,22 +2,15 @@ package Maze_Setup;
 
 import java.awt.Point;
 
-public class Maze {
-	private final String ANSI_RESET = "\u001B[0m";
-	private final String ANSI_BLACK = "\u001B[30m";
-	private final String ANSI_RED = "\u001B[31m";
-	private final String ANSI_GREEN = "\u001B[32m";
-	private final String ANSI_YELLOW = "\u001B[33m";
-	private final String ANSI_BLUE = "\u001B[34m";
-	private final String ANSI_PURPLE = "\u001B[35m";
-	private final String ANSI_CYAN = "\u001B[36m";
-	private final String ANSI_WHITE = "\u001B[37m";
+import ANSI_Color.ANSI;
 
-	private String colorReset = ANSI_RESET;
-	private String lockedColor = ANSI_CYAN;
-	private String openColor = ANSI_BLUE;
-	private String closedColor = ANSI_YELLOW;
-	private String playerColor = ANSI_WHITE;
+public class Maze {
+	private ANSI ansi = new ANSI();
+	private String colorReset = ansi.getANSI_RESET();
+	private String lockedColor = ansi.getANSI_CYAN();
+	private String openColor = ansi.getANSI_BLUE();
+	private String closedColor = ansi.getANSI_YELLOW();
+	private String playerColor = ansi.getANSI_WHITE();
 
 	Room[][] rooms;
 	int dimension;
