@@ -1,6 +1,7 @@
 package Character;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 
 public class CombatTester {
@@ -8,44 +9,55 @@ public class CombatTester {
 	public static void main(String[] args){
 		
 		Warrior warr = new Warrior();
-	    Character enemy1 = new Warrior();
-	    Character enemy2 = new Warrior();
-	    Character enemy3 = new Warrior();
-	    Character enemy4 = new Warrior();
+		Warrior warr2 = new Warrior();
+		Warrior warr3 = new Warrior();
+	    Goblin gob = new Goblin();
+	    Goblin gob2 = new Goblin();
+	    Goblin gob3 = new Goblin();
 	    
-	    enemy1.setName("one");
-	    enemy2.setName("two");
-	    enemy3.setName("three");
-	    enemy4.setName("four");
 	    
-	    ArrayList<Character> heroes = new ArrayList<Character>();
-	    ArrayList<Character> monsters = new ArrayList<Character>();
+	    warr2.setName("Two");
+	    warr3.setName("Three");
+	    
+	    ArrayList<GameCharacter> heroes = new ArrayList<GameCharacter>();
+	    ArrayList<GameCharacter> monsters = new ArrayList<GameCharacter>();
 	    
 	    heroes.add(warr);
-	    monsters.add(enemy1);
-	    monsters.add(enemy2);
-	    monsters.add(enemy3);
-	    monsters.add(enemy4);
+	    //heroes.add(warr2);
+	    //heroes.add(warr3);
+	    monsters.add(gob);
+	    monsters.add(gob2);
+	    monsters.add(gob3);
 	    
 	    
 	    Combat combat = new Combat(heroes, monsters);
+	   // combat.run();
 	    
-	    combat.setInitiatives(); //this will print an error message.
-	    combat.organizeTurns(heroes, monsters);
-	    combat.setInitiatives();
+	    heroes = new ArrayList<GameCharacter>();
+	    monsters = new ArrayList<GameCharacter>();
 	    
+	    warr = new Warrior();
+	    warr2 = new Warrior();
+	    gob = new Goblin();
+	    gob2 = new Goblin();
 	    
-	    for(Character c : combat.getTurnOrder()){
-	    	
-	    	System.out.println(c.name+": "+c.initiative);
-	    }
+	    heroes.add(warr);
+	    heroes.add(warr2);
 	    
-	   warr.cripple(enemy2);
+	    monsters.add(gob);
+	    monsters.add(gob2);
+	    Combat combat2 = new Combat(heroes, monsters);
 	    
-	    for(Character c : combat.getTurnOrder()){
-	    	
-	    	System.out.println(c.name+": "+c.initiative);
-	    }
+	    System.out.println();
+	    System.out.println("warr's exp: "+warr.getExp());
+	    System.out.println("warr2's exp: "+warr2.getExp());
+	    System.out.println();
+	    
+	    combat2.run();
+	    
+	    System.out.println();
+	    System.out.println("warr's exp: "+warr.getExp());
+	    System.out.println("warr2's exp: "+warr2.getExp());
 	}
 
 }

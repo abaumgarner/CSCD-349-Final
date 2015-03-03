@@ -7,27 +7,39 @@ public class Combat {
 
 	private Boolean combatStarted;
 	private int roundCount;
-	private ArrayList<Character> turnOrder;
+	private Round currentRound;
+	private ArrayList<GameCharacter> turnOrder;
+	private ArrayList<GameCharacter> heroes;
+	private ArrayList<GameCharacter> monsters;
 
-	public ArrayList<Character> getTurnOrder() {
+	public ArrayList<GameCharacter> getTurnOrder() {
 		return this.turnOrder;
 	}
 
-	public Combat(ArrayList<Character> Heroes, ArrayList<Character> Monsters) {
-		roundCount = 0;
-		if (this.start(Heroes, Monsters)) {
-			this.run(Heroes, Monsters);
-		}
+	public Combat(ArrayList<GameCharacter> heroes, ArrayList<GameCharacter> monsters) {
+		setRoundCount(0);
+		this.heroes = heroes;
+		this.monsters = monsters;
 
 	}
+	
+	public ArrayList<GameCharacter> getMonsters(){
+		return this.monsters;
+	}
+	
+	public ArrayList<GameCharacter> getHeroes(){
+		return this.heroes;
+	}
 
-	public Boolean start(ArrayList<Character> Heroes,
-			ArrayList<Character> Monsters) {
-		if (Heroes.isEmpty() || Monsters.isEmpty()) {
-
+	public Boolean start() {
+		if (this.heroes.isEmpty() || this.monsters.isEmpty()) {
+			System.out.println("You need heroes AND monsters to start combat.");
 			return false;
 		} else {
 
+			
+			addCombatToCharacters(this);
+			organizeTurns();
 			combatStarted = true;
 			return true;
 		}
@@ -44,62 +56,120 @@ public class Combat {
 
 	}
 
-	public void run(ArrayList<Character> Heroes, ArrayList<Character> Monsters) {
+	public void run() {
+		
+		this.start();
+		
+		while(stillAlive(heroes) && stillAlive(monsters)){
+			
+			this.currentRound = new Round(this);
+			System.out.println("---------- ROUND "+(this.roundCount+1)+"! ----------");
+			this.currentRound.start();
+		}
+		
+		this.end();
 
 	}
-
-	public void checkForDeaths(ArrayList<Character> Heroes,
-			ArrayList<Character> Monsters) {
-
-		for (Character hero : Heroes) {
-			if (hero.currentHP <= 0) {
-				Heroes.remove(hero);
-				hero.dies();
+	
+	public boolean stillAlive(ArrayList<GameCharacter> gameCharacters){
+		
+		int dead = 0;
+		if(gameCharacters.isEmpty()){
+			return false;
+		}
+		else{
+			//iterate through the list and count how many are dead
+			for(GameCharacter GameCharacter : gameCharacters){
+				if(!GameCharacter.isAlive){
+					
+					dead++;
+				}
+			}
+			//if ALL of the GameCharacters in this list are dead, return false
+			if(dead == gameCharacters.size()){
+				return false;
+			}
+			else{
+				return true;
 			}
 		}
-
-		for (Character monster : Monsters) {
-			if (monster.currentHP <= 0) {
-				Heroes.remove(monster);
-				monster.dies();
-			}
-		}
-
 	}
 
-	public void updateEffects(ArrayList<Character> Heroes,
-			ArrayList<Character> Monsters) {
+	public void addCombatToCharacters(Combat combat){
+		for(GameCharacter hero : this.heroes){
+			hero.currentCombat = combat;
+		}
+		
+		for(GameCharacter monster : this.monsters){
+			monster.currentCombat = combat;
+		}
+	}
+	
+	public void checkForDeaths() {
 
-		for (Character hero : Heroes) {
-
-			for (Effect effect : hero.effectsList) {
-
-				effect.decreaseDuration();
-				if (effect.duration == 0) {
-					effect.remove(hero);
+		for (int i = 0; i < this.heroes.size(); i++) {
+			if (this.heroes.get(i).currentHP <= 0) {
+				this.heroes.get(i).dies();
+				this.heroes.remove(i);
+				
+				
+				for(int j = 0; j < this.turnOrder.size(); j++){
+					
+					this.turnOrder.remove(j);
+					break;
+					
 				}
 			}
 		}
 
-		for (Character monster : Monsters) {
+		for (int i = 0; i < this.monsters.size(); i++) {
+			if (this.monsters.get(i).currentHP <= 0) {
+				this.monsters.get(i).dies();
+				this.monsters.remove(i);
+				
+				
+				for(int j = 0; j < this.turnOrder.size(); j++){
+					
+					this.turnOrder.remove(j);
+					break;
+				}
+			}
+		}
 
-			for (Effect effect : monster.effectsList) {
+	}
 
-				effect.decreaseDuration();
-				if (effect.duration == 0) {
-					effect.remove(monster);
+	public void updateEffects() {
+
+		for (int i = 0; i<this.heroes.size(); i++) {
+
+			for (int j = 0; j<this.heroes.get(i).effectsList.size(); j++) {
+
+				this.heroes.get(i).effectsList.get(j).decreaseDuration();
+				if (this.heroes.get(i).effectsList.get(j).duration == 0) {
+					this.heroes.get(i).effectsList.get(j).remove(this.heroes.get(i));
+				}
+			}
+		}
+
+		for (int i = 0; i<this.monsters.size(); i++) {
+
+			for (int j = 0; j<this.monsters.get(i).effectsList.size(); j++) {
+
+				this.monsters.get(i).effectsList.get(j).decreaseDuration();
+				if (this.monsters.get(i).effectsList.get(j).duration == 0) {
+					
+					this.monsters.get(i).effectsList.get(j).remove(this.monsters.get(i));
 				}
 			}
 		}
 	}
 
-	public void organizeTurns(ArrayList<Character> Heroes,
-			ArrayList<Character> Monsters) {
+	public void organizeTurns() {
 
-		turnOrder = new ArrayList<Character>();
+		turnOrder = new ArrayList<GameCharacter>();
 
-		turnOrder.addAll(Heroes);
-		turnOrder.addAll(Monsters);
+		turnOrder.addAll(this.heroes);
+		turnOrder.addAll(this.monsters);
 
 		Collections.sort(turnOrder);
 	}
@@ -107,12 +177,29 @@ public class Combat {
 	public void setInitiatives() {
 
 		if (this.turnOrder != null) {
-			for (Character c : this.turnOrder) {
+			for (GameCharacter c : this.turnOrder) {
 				c.calculateInitiative();
 			}
+			
+			Collections.sort(turnOrder);
 		} else {
 			System.out.println("turnOrder is null, can't calc initiatives.");
 		}
 	}
+	
+	public void sortInitiatives(){
+		
+		if (this.turnOrder != null) {
+			Collections.sort(turnOrder);
+		}
+	}
 
+	public int getRoundCount() {
+		return roundCount;
+	}
+
+	public void setRoundCount(int roundCount) {
+		this.roundCount = roundCount;
+	}
+	
 }
