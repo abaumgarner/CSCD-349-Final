@@ -4,8 +4,8 @@ public class CharacterTester {
 
 	public static void main(String[] args) {
 
-		Character warr = new Warrior();
-		Character enemy = new Warrior();
+		GameCharacter warr = new Warrior();
+		GameCharacter enemy = new Warrior();
 
 		warr.basicAttack(enemy);
 
@@ -19,7 +19,7 @@ public class CharacterTester {
 
 	}
 
-	public static void testEffects(Warrior Friendly, Character Enemy) {
+	public static void testEffects(Warrior Friendly, GameCharacter Enemy) {
 
 		Cripple cripple = Friendly.cripple(Enemy);
 

@@ -11,7 +11,7 @@ public class Cripple extends Effect {
 	}
 
 	@Override
-	public void onApply(Character target) {
+	public void onApply(GameCharacter target) {
 
 		double currentInit = target.getInitiative();
 		target.setInitiative(currentInit - 8);
@@ -20,7 +20,7 @@ public class Cripple extends Effect {
 	}
 
 	@Override
-	public void onRemoval(Character target) {
+	public void onRemoval(GameCharacter target) {
 
 		double currentInit = target.getInitiative();
 		target.setInitiative(currentInit + 8);

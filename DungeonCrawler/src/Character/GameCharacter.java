@@ -3,7 +3,7 @@ package Character;
 import java.util.ArrayList;
 import java.util.Random;
 
-public abstract class Character implements Comparable<Character> {
+public abstract class GameCharacter implements Comparable<GameCharacter>{
 
 	protected String name;
 	protected String race;
@@ -14,6 +14,14 @@ public abstract class Character implements Comparable<Character> {
 	protected double maxHP, currentHP;
 	protected int level, exp;
 	protected ArrayList<Effect> effectsList = new ArrayList<Effect>();
+	
+	protected Combat currentCombat;
+	
+	protected abstract void levelUpStats();
+	protected abstract double calculateMaxHP();
+	
+	public abstract void doTurn();
+	
 
 	public void addEffect(Effect newEffect) {
 
@@ -113,18 +121,40 @@ public abstract class Character implements Comparable<Character> {
 
 	public void setLevel(int lvl) {
 
-		this.level = lvl;
-
+		if(lvl > this.level){
+			
+			this.level = lvl;
+			this.levelUpStats();
+			this.maxHP = calculateMaxHP();
+			this.exp = expTable[this.level-1];
+		}
+		else if(lvl == this.level){
+			System.out.println("This character is all ready level "+this.level);
+		}
+		else{
+			System.out.println("You can't de-level a character.");
+		}
 	}
 
 	public void setExp(int exp) {
 
 		this.exp = exp;
+		this.checkExp();
 	}
 
+	public void checkExp(){
+		
+		if(expTable[this.level] <= this.exp){
+			this.setLevel(this.level + 1);
+		}
+	}
 	public void setInitiative(double init) {
 
 		this.initiative = init;
+		
+		if(this.currentCombat != null){
+			this.currentCombat.sortInitiatives();
+		}
 	}
 
 	public void calculateInitiative() {
@@ -139,17 +169,17 @@ public abstract class Character implements Comparable<Character> {
 
 		if (dexBonus > 0) {
 
-			this.setInitiative(base + bonus + dexBonus);
+			this.initiative = (base + bonus + dexBonus);
 		}
 
 		else {
 
-			this.setInitiative(base + bonus);
+			this.initiative =  (base + bonus);
 		}
 
 	}
 
-	public boolean calculateHitChance(Character target) {
+	public boolean calculateHitChance(GameCharacter target) {
 
 		// get hit chance modifiers based on attacker's stats, get miss chance
 		// based on level differences and
@@ -175,15 +205,23 @@ public abstract class Character implements Comparable<Character> {
 
 	}
 
-	public void basicAttack(Character target) {
+	public void basicAttack(GameCharacter target) {
 
 		if (this.calculateHitChance(target)) {
 
 			double damage = this.calculateDamage();
-			System.out.println(this.getName() + " strikes the enemy "
-					+ target.getName() + " for " + damage + " damage!");
-			target.setCurrentHP(target.getCurrentHP() - damage);
-
+			
+			if(damage > 0){
+				
+				System.out.println(this.getName() + " strikes the enemy "
+						+ target.getName() + " for " + damage + " damage!");
+				target.setCurrentHP(target.getCurrentHP() - damage);
+			}
+			else{
+				//treating 0 damage like a miss.
+				System.out.println(this.getName() + " tries to strike the enemy "
+						+ target.getName() + " but misses!");
+			}
 		}
 
 		else {
@@ -218,7 +256,7 @@ public abstract class Character implements Comparable<Character> {
 
 	}
 
-	public double getMissFactor(Character target) {
+	public double getMissFactor(GameCharacter target) {
 
 		double missFactor = 0, lvlFactor = 0;
 		double lvlDifference = this.level - target.level;
@@ -252,12 +290,12 @@ public abstract class Character implements Comparable<Character> {
 
 	public void dies() {
 
-		System.out.println(this.name + "has been slain!");
+		System.out.println(this.name + " has been slain!");
 		this.isAlive = false;
 	}
 
 	@Override
-	public int compareTo(Character other) {
+	public int compareTo(GameCharacter other) {
 
 		if (this.initiative < other.initiative) {
 			return -1;
@@ -273,5 +311,8 @@ public abstract class Character implements Comparable<Character> {
 		return this.profession;
 
 	}
-
+	
+	protected int[] expTable = {0, 200, 440, 728, 1074, 1489, 1987, 2584, 3301, 4161};
+	
+	
 }
