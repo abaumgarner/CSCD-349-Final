@@ -5,7 +5,8 @@ import java.util.Random;
 public class MazeBuilder {
 	private int dimension;
 
-	public MazeBuilder() {
+	@SuppressWarnings("unused")
+	private MazeBuilder() {
 		this(2);
 	}
 
@@ -18,39 +19,41 @@ public class MazeBuilder {
 
 		newMaze.setRooms(this.roomSetup());
 		newMaze.setDimension(this.dimension);
-		// this.randomLocks(newMaze);
+		
+		this.randomLocks(newMaze);
+		this.lockBorder(newMaze);
+		
 		return newMaze;
 	}
 
 	private Room[][] roomSetup() {
 		Room[][] rooms = new Room[this.dimension][this.dimension];
-
-		// Initializing Rooms
 		int i, j;
+		
 		for (i = 0; i < this.dimension; i++) {
 			for (j = 0; j < this.dimension; j++) {
 				rooms[i][j] = new Room();
 			}
 		}
+		
 		this.doorSetup(rooms);
-		
+
 		rooms = randomlyPlaceExit(rooms);
-		//rooms[this.dimension - 1][this.dimension - 1].setExit();
-		
+
 		return rooms;
 	}
 
 	private Room[][] randomlyPlaceExit(Room[][] rooms) {
 		Random rand = new Random();
 		int randomX, randomY;
-		
-		do{
+
+		do {
 			randomX = rand.nextInt((this.dimension - (this.dimension - 5)) - 1);
 			randomY = rand.nextInt((this.dimension - (this.dimension - 5)) - 1);
-		}while(randomX < 2);
-		
+		} while (randomX < 2);
+
 		rooms[randomX][randomY].setExit();
-		
+
 		return rooms;
 	}
 
@@ -90,12 +93,14 @@ public class MazeBuilder {
 
 	private void randomLocks(Maze maze) {
 		Room[][] rooms = maze.getRooms();
-		int i, j;
 		Random gen = new Random();
+		int i, j;
+
 		for (i = 0; i < maze.getDimension(); i++)
 			for (j = 0; j < maze.getDimension(); j++) {
 				int rand = gen.nextInt(2);
 				int rand2 = gen.nextInt(4);
+				
 				if (rand == 0)
 					break;
 				if (rand2 == 0)
@@ -106,6 +111,20 @@ public class MazeBuilder {
 					rooms[i][j].getWest().lock();
 				if (rand2 == 3)
 					rooms[i][j].getEast().lock();
+			}
+	}
+
+	private void lockBorder(Maze maze) {
+		Room[][] rooms = maze.getRooms();
+
+		int i, j;
+
+		for (i = 0; i < maze.getDimension(); i++)
+			for (j = 0; j < maze.getDimension(); j++) {
+				if (i == 0)
+					rooms[i][j].lockNorth();
+				if (j == 0)
+					rooms[i][j].lockWest();
 			}
 	}
 }

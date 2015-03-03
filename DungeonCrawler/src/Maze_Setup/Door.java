@@ -3,14 +3,6 @@ package Maze_Setup;
 public class Door {
 	private boolean locked = false, open = false;
 
-	/*
-	 * Truth Table Locked - Open - Result T - T - THIS STATE SHOULD BE
-	 * UNREACHABLE T - F - THE DOOR CANNOT BE PASSED THROUGH (QUESTION HAS BEEN
-	 * ANSWERED WRONG) F - T - THE DOOR CAN BE PASSED THROUGH (QUESTION HAS BE
-	 * ANSWERED CORRECTLY) F - F - THE DOOR CANNOT BE PASSED THROUGH (QUESTION
-	 * HAS YET TO BE ANSWERED)
-	 */
-
 	public boolean isLocked() {
 		return this.locked;
 	}
