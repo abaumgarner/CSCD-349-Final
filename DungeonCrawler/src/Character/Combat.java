@@ -63,7 +63,7 @@ public class Combat {
 		while(stillAlive(heroes) && stillAlive(monsters)){
 			
 			this.currentRound = new Round(this);
-			System.out.println("---------- ROUND "+(this.roundCount+1)+"! ----------");
+			System.out.println("\n---------- ROUND "+(this.roundCount+1)+"! ----------");
 			this.currentRound.start();
 		}
 		
@@ -108,7 +108,7 @@ public class Combat {
 	public void checkForDeaths() {
 
 		for (int i = 0; i < this.heroes.size(); i++) {
-			if (this.heroes.get(i).currentHP <= 0) {
+			if (this.heroes.get(i).stats.getCurrentHP() <= 0) {
 				this.heroes.get(i).dies();
 				this.heroes.remove(i);
 				
@@ -123,7 +123,7 @@ public class Combat {
 		}
 
 		for (int i = 0; i < this.monsters.size(); i++) {
-			if (this.monsters.get(i).currentHP <= 0) {
+			if (this.monsters.get(i).stats.getCurrentHP() <= 0) {
 				this.monsters.get(i).dies();
 				this.monsters.remove(i);
 				
@@ -178,7 +178,7 @@ public class Combat {
 
 		if (this.turnOrder != null) {
 			for (GameCharacter c : this.turnOrder) {
-				c.calculateInitiative();
+				c.stats.calculateInitiative();
 			}
 			
 			Collections.sort(turnOrder);
@@ -200,6 +200,49 @@ public class Combat {
 
 	public void setRoundCount(int roundCount) {
 		this.roundCount = roundCount;
+	}
+	
+	public void printHUD(){
+		
+		System.out.printf("Party: %-50sMonsters:\n", "");
+		for(int i = 0; i < Math.max(this.heroes.size(), this.monsters.size()); i++){
+		
+			
+			String heroString = "";
+			String monsterString ="";
+			if(i < this.heroes.size()){
+				
+				heroString = printHero(this.heroes.get(i));
+			}
+			
+			if(i < this.monsters.size()){
+				
+				monsterString = printMonster(this.monsters.get(i));
+			}
+			
+			System.out.printf(heroString+"%-10s"+monsterString,"");
+			System.out.println();
+		}
+		
+		System.out.print("\n\n");
+	}
+	
+	public String printHero(GameCharacter character){
+		
+		String temp;
+		
+		temp = String.format("%-20s Level: %-3s HP: %-5s/%-5s",
+				"["+character.getName()+"]",character.stats.getLevel(), character.stats.getCurrentHP(), character.stats.getMaxHP());
+		return temp;
+	}
+	
+	public String printMonster(GameCharacter character){
+		
+		String temp;
+		
+		temp = String.format("%-20s Level: %-3s HP: %-5s/%-5s",
+				"["+character.getName()+"]",character.stats.getLevel(), character.stats.getCurrentHP(), character.stats.getMaxHP());
+		return temp;
 	}
 	
 }

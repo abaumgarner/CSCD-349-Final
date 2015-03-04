@@ -9,18 +9,19 @@ public class LevelUpTester {
 		System.out.println(printStats(warr));
 		System.out.println();
 		
-		warr.setLevel(2);
+		
+		warr.stats.setLevel(2);
 		
 		System.out.println(printStats(warr));
 		System.out.println();
 		
-		warr.setLevel(3);
+		warr.stats.setLevel(3);
 		
 		System.out.println(printStats(warr));
 		System.out.println();
 		
-		warr.setLevel(3);
-		warr.setLevel(2);
+		warr.stats.setLevel(3);
+		warr.stats.setLevel(2);
 		
 		System.out.println(printStats(warr));
 		System.out.println();
@@ -30,7 +31,7 @@ public class LevelUpTester {
 		System.out.println(printStats(gob));
 		System.out.println();
 		
-		gob.setLevel(2);
+		gob.stats.setLevel(2);
 		
 		System.out.println(printStats(gob));
 		System.out.println();
@@ -40,9 +41,9 @@ public class LevelUpTester {
 		
 		String temp;
 		
-		temp = "["+character.getName() + "] Level: "+character.getLevel()+" Experience: "+character.getExp()+"\n"
-				+"HP: "+character.getMaxHP()+" Strength: "+character.getStr()+" Dexterity: "+character.getDex()+"\n"
-				+"Wisdom: "+character.getWis()+" Vitality: "+character.getVit();
+		temp = "["+character.getName() + "] Level: "+character.stats.getLevel()+" Experience: "+character.stats.getExp()+"\n"
+				+"HP: "+character.stats.getMaxHP()+" Strength: "+character.stats.getStr()+" Dexterity: "+character.stats.getDex()+"\n"
+				+"Wisdom: "+character.stats.getWis()+" Vitality: "+character.stats.getVit();
 		
 		return temp;
 	}

@@ -37,27 +37,27 @@ public class CombatTester {
 	    monsters = new ArrayList<GameCharacter>();
 	    
 	    warr = new Warrior();
-	    warr2 = new Warrior();
+	    Rogue rog = new Rogue();
 	    gob = new Goblin();
 	    gob2 = new Goblin();
 	    
 	    heroes.add(warr);
-	    heroes.add(warr2);
+	    heroes.add(rog);
 	    
 	    monsters.add(gob);
 	    monsters.add(gob2);
 	    Combat combat2 = new Combat(heroes, monsters);
 	    
 	    System.out.println();
-	    System.out.println("warr's exp: "+warr.getExp());
-	    System.out.println("warr2's exp: "+warr2.getExp());
+	    System.out.println("warr's exp: "+warr.stats.getExp());
+	    System.out.println("rog's exp: "+rog.stats.getExp());
 	    System.out.println();
 	    
 	    combat2.run();
 	    
 	    System.out.println();
-	    System.out.println("warr's exp: "+warr.getExp());
-	    System.out.println("warr2's exp: "+warr2.getExp());
+	    System.out.println("warr's exp: "+warr.stats.getExp());
+	    System.out.println("rog's exp: "+rog.stats.getExp());
 	}
 
 }
