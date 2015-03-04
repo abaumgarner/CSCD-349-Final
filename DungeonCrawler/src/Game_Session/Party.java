@@ -1,23 +1,23 @@
 package Game_Session;
 
 import java.util.ArrayList;
-import Character.Character;
+import Character.GameCharacter;
 
 public class Party
 {
-   private ArrayList<Character> partyMembers;
+   private ArrayList<GameCharacter> partyMembers;
    
    public Party()
    {
-      partyMembers = new ArrayList<Character>();
+      partyMembers = new ArrayList<GameCharacter>();
    }//end constructor
    
-   public void addMember(Character newMember)
+   public void addMember(GameCharacter newMember)
    {
       partyMembers.add(newMember);
    }//end addPartyMember
    
-   public void removeMember(Character recentlyDeceased)
+   public void removeMember(GameCharacter recentlyDeceased)
    {
       partyMembers.remove(recentlyDeceased);
    }//end removePartyMember
@@ -30,13 +30,19 @@ public class Party
       return false;
    }//end partyDefeated
    
+   protected ArrayList<GameCharacter> getPartyMembers()
+   {
+	   
+	   
+   }//end getPartyMembers
+   
    public void partyStats()
    {
       System.out.println("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
       System.out.println("\nPARTY STATS:\n");
       System.out.println("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
      
-      for(Character character: partyMembers)
+      for(GameCharacter character: partyMembers)
       {
          System.out.println("\n============================");
          System.out.println("NAME: " + character.getName());

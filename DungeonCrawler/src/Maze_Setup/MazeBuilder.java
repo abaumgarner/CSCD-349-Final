@@ -19,23 +19,23 @@ public class MazeBuilder {
 
 		newMaze.setRooms(this.roomSetup());
 		newMaze.setDimension(this.dimension);
-		
+
 		this.randomLocks(newMaze);
 		this.lockBorder(newMaze);
-		
+
 		return newMaze;
 	}
 
 	private Room[][] roomSetup() {
 		Room[][] rooms = new Room[this.dimension][this.dimension];
 		int i, j;
-		
+
 		for (i = 0; i < this.dimension; i++) {
 			for (j = 0; j < this.dimension; j++) {
 				rooms[i][j] = new Room();
 			}
 		}
-		
+
 		this.doorSetup(rooms);
 
 		rooms = randomlyPlaceExit(rooms);
@@ -100,17 +100,19 @@ public class MazeBuilder {
 			for (j = 0; j < maze.getDimension(); j++) {
 				int rand = gen.nextInt(2);
 				int rand2 = gen.nextInt(4);
-				
-				if (rand == 0)
-					break;
-				if (rand2 == 0)
-					rooms[i][j].getNorth().lock();
-				if (rand2 == 1)
-					rooms[i][j].getSouth().lock();
-				if (rand2 == 2)
-					rooms[i][j].getWest().lock();
-				if (rand2 == 3)
-					rooms[i][j].getEast().lock();
+
+				if (i != 0 && i != 1) {
+					if (rand == 0)
+						break;
+					if (rand2 == 0)
+						rooms[i][j].getNorth().lock();
+					if (rand2 == 1)
+						rooms[i][j].getSouth().lock();
+					if (rand2 == 2)
+						rooms[i][j].getWest().lock();
+					if (rand2 == 3)
+						rooms[i][j].getEast().lock();
+				}
 			}
 	}
 

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public class SFXLibrary
 {
    private ArrayList<SFX> sfx;
+   private String path = ".\\Resources\\SFX\\";
    
    public SFXLibrary()
    {
@@ -15,12 +16,12 @@ public class SFXLibrary
    {
       try
       {
-         SFX newSFX = new SFX(track);
+         SFX newSFX = new SFX(path + track);
          sfx.add(newSFX);
       }//end try
       catch(Exception e)
       {
-         System.out.println("ERROR: could not add track '" + track + "' to SFX library");
+         System.out.println("ERROR: could not add track '" + path + track + "' to SFX library");
       }//end catch
    }//end addToLibrary
    
@@ -31,6 +32,7 @@ public class SFXLibrary
    
    protected void playTrack(String trackName)
    {
+	   trackName = path + trackName; 
       for(SFX track: sfx)
       {
          if(track.getTrackName().equals(trackName))

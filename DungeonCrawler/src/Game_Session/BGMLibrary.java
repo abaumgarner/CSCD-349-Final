@@ -6,6 +6,7 @@ public class BGMLibrary
 {
    private ArrayList<BGM> bgm;
    private BGM activeTrack;
+   private String path = ".\\Resources\\BGM\\";
    
    public BGMLibrary()
    {
@@ -13,16 +14,16 @@ public class BGMLibrary
       activeTrack = null;
    }//end constructor
    
-   protected void add(String track)
+   protected void add(String trackName)
    {
       try
       {
-         BGM bgmTrack = new BGM(track);
+         BGM bgmTrack = new BGM(path + trackName);
          bgm.add(bgmTrack);
       }//end try
       catch(Exception e)
       {
-         System.out.println("ERROR: could not add track '" + track + "' to BGM library");
+         System.out.println("ERROR: could not add track '" + trackName + "' to BGM library");
       }//end catch
    }//end addToLibrary
    
@@ -31,8 +32,9 @@ public class BGMLibrary
       bgm.remove(track);
    }//end addToLibrary
    
-   private void playBGM(String trackName)
+   protected void playBGM(String trackName)
    {  
+	   trackName = path + trackName;
       for(BGM track: bgm)
       {
          if(track.getTrackName().equals(trackName))//find track in list...
