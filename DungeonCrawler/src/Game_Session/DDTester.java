@@ -45,11 +45,9 @@ public class DDTester {
 			}// end else if
 
 			else {
-				System.out
-						.println("There was an error executing the command...");
+				System.out.println("There was an error executing the command...");
 			}// end
 		}// end while
-
 	}// end main
 }// end class
 
