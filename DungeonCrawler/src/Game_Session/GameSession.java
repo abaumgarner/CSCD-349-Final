@@ -245,7 +245,7 @@ public class GameSession {
 		return matches;
 	}// end regexCheck
 
-	protected void initiateBattle(Maze maze) {
+	protected void initiateBattle(Maze maze, BGMLibrary bgmLibrary, SFXLibrary sfxLibrary) {
 		Random randVal = new Random();
 		int result = randVal.nextInt(50);
 		// System.out.println("result = " + result);
@@ -253,10 +253,25 @@ public class GameSession {
 		if (result >= 25 || maze.playerInExit())
 		{
 			System.out.println("BATTLE COMMENCED!");
-			Combat combat = new Combat(party, );
-			
+			ArrayList<GameCharacter> monsters = spawnMonsters();
+			Combat combat = new Combat(party.getPartyMembers(), monsters);
+			bgmLibrary.playBGM("battle.wav");
+			combat.run();
+			bgmLibrary.playBGM("cave.wav");
 		}//end if
 	}// end initiateBattle
+	
+	private ArrayList<GameCharacter> spawnMonsters()
+	{
+		ArrayList<GameCharacter> monsters = new ArrayList<GameCharacter>();
+		Goblin gob1 = new Goblin();
+		Goblin gob2 = new Goblin();
+		Goblin gob3 = new Goblin();
+		monsters.add(gob1);
+		monsters.add(gob2);
+		monsters.add(gob3);
+		return monsters;
+	}//end spawnMonsters
 
 	public void intro() {
 		System.out

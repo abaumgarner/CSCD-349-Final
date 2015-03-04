@@ -3,7 +3,6 @@ package Character;
 import java.util.ArrayList;
 import java.util.Random;
 
-
 public class CombatTester {
 	
 	public static void main(String[] args){
