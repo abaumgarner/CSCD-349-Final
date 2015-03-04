@@ -99,19 +99,31 @@ public class MazeBuilder {
 		for (i = 0; i < maze.getDimension(); i++)
 			for (j = 0; j < maze.getDimension(); j++) {
 				int rand = gen.nextInt(2);
-				int rand2 = gen.nextInt(4);
+				int rand2 = gen.nextInt(40);
 
 				if (i != 0 && i != 1) {
 					if (rand == 0)
 						break;
-					if (rand2 == 0)
+					if (rand2 < 10) {
 						rooms[i][j].getNorth().lock();
-					if (rand2 == 1)
+						if (!maze.mazeTraversal())
+							rooms[i][j].getNorth().unlock();
+					}
+					if (rand2 < 20) {
 						rooms[i][j].getSouth().lock();
-					if (rand2 == 2)
+						if (!maze.mazeTraversal())
+							rooms[i][j].getSouth().unlock();
+					}
+					if (rand2 < 30) {
 						rooms[i][j].getWest().lock();
-					if (rand2 == 3)
+						if (!maze.mazeTraversal())
+							rooms[i][j].getWest().unlock();
+					}
+					if (rand2 < 40) {
 						rooms[i][j].getEast().lock();
+						if (!maze.mazeTraversal())
+							rooms[i][j].getEast().unlock();
+					}
 				}
 			}
 	}

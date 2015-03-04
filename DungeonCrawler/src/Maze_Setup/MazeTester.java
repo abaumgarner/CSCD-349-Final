@@ -19,7 +19,7 @@ public class MazeTester {
 	*/	
 	
 	private static Scanner kb;
-
+	
 	public static void main(String[] args) {
 		kb = new Scanner(System.in);
 		MazeBuilder builder = new MazeBuilder(10);
