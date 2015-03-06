@@ -38,11 +38,13 @@ public class CombatTester {
 	    
 	    warr = new Warrior();
 	    Rogue rog = new Rogue();
+	    Mage mage = new Mage();
 	    gob = new Goblin();
 	    gob2 = new Goblin();
 	    
-	    heroes.add(warr);
-	    heroes.add(rog);
+	    gob2.setName("TESTINGTESTING");
+	    //heroes.add(warr);
+	    heroes.add(mage);
 	    
 	    monsters.add(gob);
 	    monsters.add(gob2);

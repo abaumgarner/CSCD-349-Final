@@ -115,6 +115,44 @@ public abstract class GameCharacter implements Comparable<GameCharacter>{
 		}
 
 	}
+	
+	public void magicAttack(GameCharacter target) {
+
+		if (this.calculateHitChance(target)) {
+
+			double damage = this.calculateMagicDamage();
+			
+			if(damage > 0){
+				
+				System.out.println(this.getName() + " fires a magical bolt at the enemy "
+						+ target.getName() + " for " + damage + " damage!");
+				target.stats.setCurrentHP(target.stats.getCurrentHP() - damage);
+			}
+			else{
+				//treating 0 damage like a miss.
+				System.out.println(this.getName() + " tries to strike the enemy with magic "
+						+ target.getName() + " but misses!");
+			}
+		}
+
+		else {
+
+			System.out.println(this.getName() + " tries to strike the enemy with magic "
+					+ target.getName() + " but misses!");
+		}
+
+	}
+	
+	public double calculateMagicDamage(){
+		
+		Random roll = new Random();
+
+		double baseDamage = (double) roll.nextInt(4 + this.stats.getLevel());
+
+		double extraDamage = ((this.stats.getWis() - (10 + ((double) this.stats.getLevel() - 1)))) * .5;
+
+		return baseDamage + extraDamage;
+	}
 
 	public double calculateDamage() {
 
@@ -183,11 +221,31 @@ public abstract class GameCharacter implements Comparable<GameCharacter>{
 
 		if (this.stats.getInitiative() < other.stats.getInitiative()) {
 			return -1;
-		} else if (this.stats.getInitiative() > other.stats.getInitiative()) {
+		} 
+		else if (this.stats.getInitiative() > other.stats.getInitiative()) {
 			return 1;
-		} else {
-			return 0;
-		}
+		} 
+		else{
+			
+			if(this.stats.getLevel() < other.stats.getInitiative()){
+				return -1;
+			}
+			else if(this.stats.getLevel() > other.stats.getInitiative()){
+				return 1;
+			}
+			else{
+				
+				if(this.getProfession().toLowerCase().equals("monster") && (!other.getProfession().toLowerCase().equals("monster")) ){
+					return 1;
+				}
+				else if((!this.getProfession().toLowerCase().equals("monster")) && other.getProfession().toLowerCase().equals("monster") ){
+					return  -1;
+				}
+				else{
+					return 0;
+				}
+			}
+	    }
 	}
 
 	public String getProfession() {

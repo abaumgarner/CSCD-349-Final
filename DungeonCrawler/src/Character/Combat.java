@@ -11,6 +11,7 @@ public class Combat {
 	private ArrayList<GameCharacter> turnOrder;
 	private ArrayList<GameCharacter> heroes;
 	private ArrayList<GameCharacter> monsters;
+	private HUD hud;
 
 	public ArrayList<GameCharacter> getTurnOrder() {
 		return this.turnOrder;
@@ -20,6 +21,7 @@ public class Combat {
 		setRoundCount(0);
 		this.heroes = heroes;
 		this.monsters = monsters;
+		this.setHud(new HUD(this));
 
 	}
 	
@@ -48,7 +50,16 @@ public class Combat {
 	public Boolean end() {
 		if (combatStarted) {
 			combatStarted = false;
+			
+			for(int i = 0; i <this.heroes.size(); i++ ){
+				
+				this.heroes.get(i).currentCombat = null;
+				this.heroes.get(i).effectsList = new ArrayList<Effect>();
+			}
+			
 			return true;
+			
+			
 		} else {
 			System.out.println("Combat has not started, so you can't end it.");
 			return true;
@@ -201,48 +212,14 @@ public class Combat {
 	public void setRoundCount(int roundCount) {
 		this.roundCount = roundCount;
 	}
-	
-	public void printHUD(){
-		
-		System.out.printf("Party: %-50sMonsters:\n", "");
-		for(int i = 0; i < Math.max(this.heroes.size(), this.monsters.size()); i++){
-		
-			
-			String heroString = "";
-			String monsterString ="";
-			if(i < this.heroes.size()){
-				
-				heroString = printHero(this.heroes.get(i));
-			}
-			
-			if(i < this.monsters.size()){
-				
-				monsterString = printMonster(this.monsters.get(i));
-			}
-			
-			System.out.printf(heroString+"%-10s"+monsterString,"");
-			System.out.println();
-		}
-		
-		System.out.print("\n\n");
+
+	public HUD getHud() {
+		return this.hud;
+	}
+
+	public void setHud(HUD hud) {
+		this.hud = hud;
 	}
 	
-	public String printHero(GameCharacter character){
-		
-		String temp;
-		
-		temp = String.format("%-20s Level: %-3s HP: %-5s/%-5s",
-				"["+character.getName()+"]",character.stats.getLevel(), character.stats.getCurrentHP(), character.stats.getMaxHP());
-		return temp;
-	}
-	
-	public String printMonster(GameCharacter character){
-		
-		String temp;
-		
-		temp = String.format("%-20s Level: %-3s HP: %-5s/%-5s",
-				"["+character.getName()+"]",character.stats.getLevel(), character.stats.getCurrentHP(), character.stats.getMaxHP());
-		return temp;
-	}
 	
 }

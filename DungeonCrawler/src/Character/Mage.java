@@ -2,75 +2,38 @@ package Character;
 
 import java.util.Scanner;
 
-public class Warrior extends Hero{
+public class Mage extends Hero {
 	
-   private String[] abilities;
-
-   public Warrior(){
-  
-      this.name = "NULL The Conqueror";
-      this.profession = "Warrior";
-      this.race = "Null'thraki";
-      
-      this.stats = new StatsObject(this);
-      
-      this.stats.setLevel(1);
-      this.stats.setExp(0);
-   
-      this.stats.setStr(12);
-      this.stats.setDex(10);
-      this.stats.setWis(8);
-      this.stats.setVit(10);
-      this.stats.setMaxHP(calculateMaxHP());
-      this.stats.setCurrentHP(this.stats.getMaxHP());
-      
-      this.isAlive = true;
-      
-      this.abilities = new String[]{"Attack","Cripple"};
-      
-   }
-   
-   public double calculateMaxHP(){
-      
-      return 10 + this.stats.getVit() + (5 * this.stats.getLevel());
-   
-   }
-   
-   public Cripple cripple(GameCharacter target){
-   
-	   if(this.calculateHitChance(target)){
-		   
-		   
-		   double damage = this.calculateDamage()-2;
-		   if(damage < 0 ){
-			   damage = 0;
-		   }
-		   
-		   System.out.println(this.getName() + " slices the enemy "
-					+ target.getName() + " for " + damage + " damage!");
-		   target.stats.setCurrentHP(target.stats.getCurrentHP() - damage);
-			
-		   Cripple cripple = new Cripple();
-		   cripple.apply(target);
-		   return cripple;
-	   }
-	   
-	   else{
-		   
-		   System.out.println(this.getName() + " tries to cripple the enemy "
-					+ target.getName() + " but misses!");
-		   
-		   return null;
-	   }
-      
-   
-      
-   }
-   
-   @Override 
-   public void doTurn(){
+	private String[] abilities;
+	
+	public Mage(){
 		
-	   	Boolean correct = false;
+		this.name = "Dangalf The Off-White";
+		this.profession = "Mage";
+		this.race = "Maiar";
+			      
+		this.stats = new StatsObject(this);
+			      
+		this.stats.setLevel(1);
+		this.stats.setExp(0);
+			   
+		this.stats.setStr(10);
+		this.stats.setDex(10);
+		this.stats.setWis(12);
+		this.stats.setVit(8);
+		this.stats.setMaxHP(calculateMaxHP());
+		this.stats.setCurrentHP(this.stats.getMaxHP());
+			      
+		this.isAlive = true;
+			      
+		this.abilities = new String[]{"Attack","Freeze"};
+		
+	}
+		
+	@Override
+	public void doTurn() {
+	   	
+		Boolean correct = false;
 		Scanner kb = new Scanner(System.in);
 		String attackInput;
 		
@@ -117,7 +80,7 @@ public class Warrior extends Hero{
 						try{
 							
 							int choice = Integer.parseInt(kb.nextLine());
-							this.basicAttack(this.currentCombat.getMonsters().get(choice - 1));
+							this.magicAttack(this.currentCombat.getMonsters().get(choice - 1));
 							break;
 						}
 						catch(Exception e){
@@ -126,7 +89,7 @@ public class Warrior extends Hero{
 					}
 				}
 				
-				else if(attackInput.toLowerCase().equals("2") || attackInput.toLowerCase().equals("cripple")){
+				else if(attackInput.toLowerCase().equals("2") || attackInput.toLowerCase().equals("freeze")){
 					
 					correct = true;
 					System.out.println("Who do you wish to cripple? (Choose a number)");
@@ -139,7 +102,7 @@ public class Warrior extends Hero{
 					while(true){
 						try{
 							int choice = Integer.parseInt(kb.nextLine());
-							this.cripple(this.currentCombat.getMonsters().get(choice - 1));
+							this.freeze(this.currentCombat.getMonsters().get(choice - 1));
 							break;
 						}
 						catch(Exception e){
@@ -150,22 +113,56 @@ public class Warrior extends Hero{
 				}
 			}//endwhile
 		}//endif
-		
-	}//end doTurn
+	}
+	
+	public Freeze freeze(GameCharacter target){
+
+		if(this.calculateHitChance(target)){
+			   
+			   
+			double damage = this.calculateMagicDamage()-1;
+			if(damage < 0 ){
+				damage = 0;
+			}
+			   
+			System.out.println(this.getName() + " sends a freezing blast at the enemy "
+					+ target.getName() + " for " + damage + " damage!");
+			target.stats.setCurrentHP(target.stats.getCurrentHP() - damage);
+				
+			Freeze freeze = new Freeze();
+			freeze.apply(target);
+			return freeze;
+		}
+		   
+		else{
+			   
+			System.out.println(this.getName() + " tries to freeze the enemy "
+					+ target.getName() + " but misses!");
+			   
+			return null;
+		}
+	      
+	   
+	}
 
 	@Override
-	public void levelUpStats(){
-		
-		double strMod = 1.5;
+	protected void levelUpStats() {
+
+		double wisMod = 1.5;
 		double dexMod = 1.0;
-		double vitMod = 1.0;
-		double wisMod = .5;
+		double strMod = 1.0;
+		double vitMod = .5;
 		
-		this.stats.setStr(this.stats.getStr()+ strMod);
+		this.stats.setStr(this.stats.getStr()+ wisMod);
 		this.stats.setDex(this.stats.getDex()+ dexMod);
-		this.stats.setVit(this.stats.getVit()+ vitMod);
-		this.stats.setWis(this.stats.getWis()+ wisMod);
-		
+		this.stats.setVit(this.stats.getVit()+ strMod);
+		this.stats.setWis(this.stats.getWis()+ vitMod);
+
+	}
+
+	@Override
+	protected double calculateMaxHP() {
+		return 8 + this.stats.getVit() + (3 * this.stats.getLevel());
 	}
 
 }

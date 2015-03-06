@@ -13,8 +13,6 @@ public class Bleed extends Effect {
 	@Override
 	public void onApply(GameCharacter target) {
 		
-		this.tick();
-		
 		String message;
 		
 		if(this.affected.getProfession().equals("Monster")){

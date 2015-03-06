@@ -17,7 +17,7 @@ public class Round{
 			//iterate through characters in combat and give them a turn
 			if(this.currentCombat.getTurnOrder() != null){
 				
-				currentCombat.printHUD();
+				currentCombat.getHud().printHUD();
 				
 				for(int i = 0; i < this.currentCombat.getTurnOrder().size(); i++){
 					//do turns
