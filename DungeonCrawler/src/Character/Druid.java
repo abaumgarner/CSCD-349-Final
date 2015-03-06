@@ -1,16 +1,17 @@
 package Character;
 
+import java.util.Random;
 import java.util.Scanner;
 
-public class Mage extends Hero {
+public class Druid extends Hero {
+
+private String[] abilities;
 	
-	private String[] abilities;
-	
-	public Mage(){
+	public Druid(){
 		
-		this.name = "Dangalf The Off-White";
-		this.profession = "Mage";
-		this.race = "Maiar";
+		this.name = "Elder Greenthumb";
+		this.profession = "Druid";
+		this.race = "Old Person";
 			      
 		this.stats = new StatsObject(this);
 			      
@@ -18,15 +19,15 @@ public class Mage extends Hero {
 		this.stats.setExp(0);
 			   
 		this.stats.setStr(10);
-		this.stats.setDex(10);
+		this.stats.setDex(8);
 		this.stats.setWis(12);
-		this.stats.setVit(8);
+		this.stats.setVit(10);
 		this.stats.setMaxHP(calculateMaxHP());
 		this.stats.setCurrentHP(this.stats.getMaxHP());
 			      
 		this.isAlive = true;
 			      
-		this.abilities = new String[]{"Attack","Freeze"};
+		this.abilities = new String[]{"Attack","Mending Touch"};
 		
 	}
 		
@@ -89,20 +90,20 @@ public class Mage extends Hero {
 					}
 				}
 				
-				else if(attackInput.toLowerCase().equals("2") || attackInput.toLowerCase().equals("freeze")){
+				else if(attackInput.toLowerCase().equals("2") || attackInput.toLowerCase().equals("mending touch")){
 					
 					correct = true;
-					System.out.println("Who do you wish to cripple? (Choose a number)");
+					System.out.println("Who do you wish to mend? (Choose a number)");
 					
-					for(int i = 0; i<this.currentCombat.getMonsters().size(); i++){
+					for(int i = 0; i<this.currentCombat.getHeroes().size(); i++){
 						
-						System.out.println((i+1)+") "+this.currentCombat.getMonsters().get(i).getName()+": "+this.currentCombat.getMonsters().get(i).stats.getCurrentHP()+"/"+this.currentCombat.getMonsters().get(i).stats.getMaxHP()+" HP ");
+						System.out.println((i+1)+") "+this.currentCombat.getHeroes().get(i).getName()+": "+this.currentCombat.getHeroes().get(i).stats.getCurrentHP()+"/"+this.currentCombat.getHeroes().get(i).stats.getMaxHP()+" HP ");
 					}
 					
 					while(true){
 						try{
 							int choice = Integer.parseInt(kb.nextLine());
-							this.freeze(this.currentCombat.getMonsters().get(choice - 1));
+							this.mendingTouch(this.currentCombat.getHeroes().get(choice - 1));
 							break;
 						}
 						catch(Exception e){
@@ -115,48 +116,31 @@ public class Mage extends Hero {
 		}//endif
 	}
 	
-	public Freeze freeze(GameCharacter target){
+	public void mendingTouch(GameCharacter target){
 
-		if(this.calculateHitChance(target)){
-			   
-			   
-			double damage = this.calculateMagicDamage()-1;
-			if(damage < 0 ){
-				damage = 0;
-			}
-			   
-			System.out.println(this.getName() + " sends a freezing blast at the enemy "
-					+ target.getName() + " for " + damage + " damage!");
-			target.stats.setCurrentHP(target.stats.getCurrentHP() - damage);
-				
-			Freeze freeze = new Freeze();
-			freeze.apply(target);
-			return freeze;
-		}
-		   
-		else{
-			   
-			System.out.println(this.getName() + " tries to freeze the enemy "
-					+ target.getName() + " but misses!");
-			   
-			return null;
-		}
+		Random roll = new Random();
+		
+		double healing = this.stats.getWis() - (10 + (1 - this.stats.getLevel()));
 	      
+		double bonus = roll.nextInt(3+this.stats.getLevel())+1;
 	   
+		//heal for the amount, or set the target's hp to MAX, whichever is less.
+		target.stats.setCurrentHP( Math.min((target.stats.getCurrentHP() + healing + bonus), target.stats.getMaxHP()) );
+		System.out.println(this.getName()+" mends " +target.getName()+"'s wounds, restoring "+(healing+bonus)+"HP.");
 	}
 
 	@Override
 	protected void levelUpStats() {
 
 		double wisMod = 1.5;
-		double dexMod = 1.0;
 		double strMod = 1.0;
-		double vitMod = .5;
+		double vitMod = 1.0;
+		double dexMod = .5;
 		
 		this.stats.setStr(this.stats.getWis()+ wisMod);
-		this.stats.setDex(this.stats.getDex()+ dexMod);
-		this.stats.setVit(this.stats.getStr()+ strMod);
-		this.stats.setWis(this.stats.getVit()+ vitMod);
+		this.stats.setDex(this.stats.getStr()+ strMod);
+		this.stats.setVit(this.stats.getVit()+ vitMod);
+		this.stats.setWis(this.stats.getDex()+ dexMod);
 
 	}
 

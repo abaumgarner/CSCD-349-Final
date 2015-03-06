@@ -40,6 +40,7 @@ public class Combat {
 		} else {
 
 			
+			//add the combat to characters and get turnOrder setup.
 			addCombatToCharacters(this);
 			organizeTurns();
 			combatStarted = true;
@@ -53,6 +54,7 @@ public class Combat {
 			
 			for(int i = 0; i <this.heroes.size(); i++ ){
 				
+				//remove all the combat from characters, and null out all effects on characters
 				this.heroes.get(i).currentCombat = null;
 				this.heroes.get(i).effectsList = new ArrayList<Effect>();
 			}
@@ -71,6 +73,7 @@ public class Combat {
 		
 		this.start();
 		
+		//while each 'side' has a living member, keep doing turns.
 		while(stillAlive(heroes) && stillAlive(monsters)){
 			
 			this.currentRound = new Round(this);
@@ -107,6 +110,7 @@ public class Combat {
 	}
 
 	public void addCombatToCharacters(Combat combat){
+		
 		for(GameCharacter hero : this.heroes){
 			hero.currentCombat = combat;
 		}
@@ -150,6 +154,8 @@ public class Combat {
 	}
 
 	public void updateEffects() {
+		
+		//check all the effects on characters in this combat, then decrement their duration. remove them if their duration == zero.
 
 		for (int i = 0; i<this.heroes.size(); i++) {
 
@@ -186,6 +192,8 @@ public class Combat {
 	}
 
 	public void setInitiatives() {
+		
+		//calculate new initiative values for everyone in the combat, then sort turnOrder
 
 		if (this.turnOrder != null) {
 			for (GameCharacter c : this.turnOrder) {

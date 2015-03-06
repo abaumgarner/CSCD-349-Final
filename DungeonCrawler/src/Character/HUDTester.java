@@ -36,7 +36,7 @@ public class HUDTester {
 		
 		String temp;
 		
-		temp = String.format("%-20s Level: %-3s HP: %-5s/%-5s",
+		temp = String.format("%-20s Level: %-3s HP: %-5s/%5s",
 				"["+character.getName()+"]",character.stats.getLevel(), character.stats.getCurrentHP(), character.stats.getMaxHP());
 		return temp;
 	}
@@ -45,7 +45,7 @@ public class HUDTester {
 		
 		String temp;
 		
-		temp = String.format("%-20s Level: %-3s HP: %-5s/%-5s",
+		temp = String.format("%-20s Level: %-3s HP: %-5s/%5s",
 				"["+character.getName()+"]",character.stats.getLevel(), character.stats.getCurrentHP(), character.stats.getMaxHP());
 		return temp;
 	}

@@ -11,7 +11,7 @@ public class HUD {
 
 	public void printHUD(){
 		
-		System.out.printf("Party: %-58sMonsters:\n", "");
+		System.out.printf("Party: %-60sMonsters:\n", "");
 		for(int i = 0; i < Math.max(this.currentCombat.getHeroes().size(), this.currentCombat.getMonsters().size()); i++){
 		
 			
@@ -28,7 +28,7 @@ public class HUD {
 			}
 			
 			if(heroString.isEmpty()){
-				heroString = String.format("%-55s", heroString);
+				heroString = String.format("%-57s", heroString);
 			}
 				
 				System.out.printf(heroString+"%-10s"+monsterString,"");
@@ -44,7 +44,7 @@ public class HUD {
 		
 		String temp;
 		
-		temp = String.format("%-30s Level: %-3s HP: %s/%s",
+		temp = String.format("%-30s Level: %-3s HP: %-5s/%5s",
 				"["+character.getName()+"]",character.stats.getLevel(), character.stats.getCurrentHP(), character.stats.getMaxHP());
 		return temp;
 	}
@@ -53,7 +53,7 @@ public class HUD {
 		
 		String temp;
 		
-		temp = String.format("%-30s Level: %-3s HP: %s/%s",
+		temp = String.format("%-30s Level: %-3s HP: %-5s/%5s",
 				"["+character.getName()+"]",character.stats.getLevel(), character.stats.getCurrentHP(), character.stats.getMaxHP());
 		return temp;
 	}
