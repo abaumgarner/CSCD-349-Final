@@ -40,4 +40,10 @@ public class GameShop {
 			shopItems.trimToSize();
 		} while (shopItems.size() < 10);
 	}
+
+	public GameItem getShopItem(int location) {
+		return this.shopItems.get(location - 1);
+	}
+	
+	
 }

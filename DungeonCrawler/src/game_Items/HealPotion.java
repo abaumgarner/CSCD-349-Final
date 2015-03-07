@@ -15,4 +15,8 @@ public abstract class HealPotion extends GameItem {
 
 		return str;
 	}
+
+	public int getHealthAmount() {
+		return this.healAmount;
+	}
 }
