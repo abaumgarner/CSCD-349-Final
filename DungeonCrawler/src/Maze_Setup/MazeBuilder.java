@@ -19,27 +19,25 @@ public class MazeBuilder {
 
 		newMaze.setRooms(this.roomSetup());
 		newMaze.setDimension(this.dimension);
-		
-		this.randomLocks(newMaze);
+		lockRandomDoors(newMaze);
 		this.lockBorder(newMaze);
-		
+
 		return newMaze;
 	}
 
 	private Room[][] roomSetup() {
 		Room[][] rooms = new Room[this.dimension][this.dimension];
 		int i, j;
-		
+
 		for (i = 0; i < this.dimension; i++) {
 			for (j = 0; j < this.dimension; j++) {
 				rooms[i][j] = new Room();
 			}
 		}
-		
+
 		this.doorSetup(rooms);
 
 		rooms = randomlyPlaceExit(rooms);
-
 		return rooms;
 	}
 
@@ -91,27 +89,35 @@ public class MazeBuilder {
 			}
 	}
 
-	private void randomLocks(Maze maze) {
+	private void lockRandomDoors(Maze maze) {
 		Room[][] rooms = maze.getRooms();
-		Random gen = new Random();
-		int i, j;
+		Random rand = new Random();
+		int randomX, randomY;
 
-		for (i = 0; i < maze.getDimension(); i++)
-			for (j = 0; j < maze.getDimension(); j++) {
-				int rand = gen.nextInt(2);
-				int rand2 = gen.nextInt(4);
-				
-				if (rand == 0)
-					break;
-				if (rand2 == 0)
-					rooms[i][j].getNorth().lock();
-				if (rand2 == 1)
-					rooms[i][j].getSouth().lock();
-				if (rand2 == 2)
-					rooms[i][j].getWest().lock();
-				if (rand2 == 3)
-					rooms[i][j].getEast().lock();
+		for (int i = 0; i < this.dimension; i++) {
+			randomX = rand.nextInt(this.dimension);
+			randomY = rand.nextInt(this.dimension);
+
+			int randomDoor = rand.nextInt(4) + 1;
+
+			if (randomDoor == 1) {
+				rooms[randomX][randomY].getNorth().lock();
+				if (!maze.mazeTraversal())
+					rooms[randomX][randomY].getNorth().unlock();
+			} else if (randomDoor == 2) {
+				rooms[randomX][randomY].getEast().lock();
+				if (!maze.mazeTraversal())
+					rooms[randomX][randomY].getEast().unlock();
+			} else if (randomDoor == 3) {
+				rooms[randomX][randomY].getSouth().lock();
+				if (!maze.mazeTraversal())
+					rooms[randomX][randomY].getSouth().unlock();
+			} else {
+				rooms[randomX][randomY].getWest().lock();
+				if (!maze.mazeTraversal())
+					rooms[randomX][randomY].getWest().unlock();
 			}
+		}
 	}
 
 	private void lockBorder(Maze maze) {
