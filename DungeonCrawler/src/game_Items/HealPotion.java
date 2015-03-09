@@ -1,6 +1,6 @@
 package game_Items;
 
-public abstract class HealPotion extends GameItem {
+public abstract class HealPotion implements GameItem {
 	private int healAmount;
 
 	void setHealAmount(int amount) {
@@ -11,7 +11,7 @@ public abstract class HealPotion extends GameItem {
 	public String toString() {
 		String str;
 
-		str = this.getItemName() + " (+" + this.healAmount + " health)";
+		str = getItemName() + " (+" + this.healAmount + " health)";
 
 		return str;
 	}

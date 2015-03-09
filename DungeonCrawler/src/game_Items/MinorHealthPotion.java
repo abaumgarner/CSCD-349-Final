@@ -1,10 +1,20 @@
 package game_Items;
 
 public class MinorHealthPotion extends HealPotion {
+	private final String potionName = "Minor Health Potion";
+	private final int potionCost = 1;
 
 	public MinorHealthPotion() {
-		super.setItemName("Minor Health Potion", 1);
-		super.setHealAmount(1);
+		this.setHealAmount(1);
 	}
 
+	@Override
+	public int getCost() {
+		return this.potionCost;
+	}
+
+	@Override
+	public String getItemName() {
+		return this.potionName;
+	}
 }
