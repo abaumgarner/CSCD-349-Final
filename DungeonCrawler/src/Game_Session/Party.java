@@ -32,8 +32,7 @@ public class Party
    
    protected ArrayList<GameCharacter> getPartyMembers()
    {
-	   
-	   
+	   return partyMembers;
    }//end getPartyMembers
    
    public void partyStats()
