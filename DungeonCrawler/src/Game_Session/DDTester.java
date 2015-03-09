@@ -44,7 +44,7 @@ public class DDTester {
 				System.out.println(maze.toString());
 				game.navigate(maze);
 				sfxLibrary.playTrack("footsteps.wav");
-				game.initiateBattle(maze);
+				game.initiateBattle(maze, bgmLibrary, sfxLibrary);
 			}// end if
 
 			else if (cmd.equals("status")) {

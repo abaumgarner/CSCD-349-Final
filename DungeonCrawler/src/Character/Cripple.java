@@ -13,17 +13,25 @@ public class Cripple extends Effect {
 	@Override
 	public void onApply(GameCharacter target) {
 
-		double currentInit = target.getInitiative();
-		target.setInitiative(currentInit - 8);
+		String message;
+		double currentInit = target.stats.getInitiative();
+		target.stats.setInitiative(currentInit - 8);
 
-		System.out.println("The " + target.getName() + " has been crippled!");
+		if(this.affected.getProfession().equals("Monster")){
+			message = "The "+affected.getRace()+" has been crippled!";
+		}
+		else{
+			message = affected.getName()+" has been crippled!";
+		}
+		
+		System.out.println(message);
 	}
 
 	@Override
 	public void onRemoval(GameCharacter target) {
 
-		double currentInit = target.getInitiative();
-		target.setInitiative(currentInit + 8);
+		double currentInit = target.stats.getInitiative();
+		target.stats.setInitiative(currentInit + 8);
 		System.out.println("The " + target.getName()
 				+ " is no longer crippled!");
 	}

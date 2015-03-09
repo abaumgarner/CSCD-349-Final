@@ -2,41 +2,41 @@ package Character;
 
 import java.util.Scanner;
 
-public class Warrior extends Hero{
-	
+public class Rogue extends Hero {
+
    private String[] abilities;
 
-   public Warrior(){
+   public Rogue(){
   
-      this.name = "NULL The Conqueror";
-      this.profession = "Warrior";
-      this.race = "Null'thraki";
+      this.name = "Rougelol";
+      this.profession = "Rogue";
+      this.race = "Trollolol";
       
       this.stats = new StatsObject(this);
       
       this.stats.setLevel(1);
       this.stats.setExp(0);
    
-      this.stats.setStr(12);
-      this.stats.setDex(10);
-      this.stats.setWis(8);
-      this.stats.setVit(10);
+      this.stats.setStr(10);
+      this.stats.setDex(12);
+      this.stats.setWis(10);
+      this.stats.setVit(8);
       this.stats.setMaxHP(calculateMaxHP());
       this.stats.setCurrentHP(this.stats.getMaxHP());
       
       this.isAlive = true;
       
-      this.abilities = new String[]{"Attack","Cripple"};
+      this.abilities = new String[]{"Attack","Lacerate"};
       
    }
    
    public double calculateMaxHP(){
       
-      return 10 + this.stats.getVit() + (5 * this.stats.getLevel());
+      return 8 + this.stats.getVit() + (3 * this.stats.getLevel());
    
    }
    
-   public Cripple cripple(GameCharacter target){
+   public Bleed lacerate(GameCharacter target){
    
 	   if(this.calculateHitChance(target)){
 		   
@@ -46,18 +46,18 @@ public class Warrior extends Hero{
 			   damage = 0;
 		   }
 		   
-		   System.out.println(this.getName() + " slices the enemy "
+		   System.out.println(this.getName() + " cuts a deep wound in the enemy "
 					+ target.getName() + " for " + damage + " damage!");
 		   target.stats.setCurrentHP(target.stats.getCurrentHP() - damage);
 			
-		   Cripple cripple = new Cripple();
-		   cripple.apply(target);
-		   return cripple;
+		   Bleed bleed = new Bleed();
+		   bleed.apply(target);
+		   return bleed;
 	   }
 	   
 	   else{
 		   
-		   System.out.println(this.getName() + " tries to cripple the enemy "
+		   System.out.println(this.getName() + " tries to lacerate the enemy "
 					+ target.getName() + " but misses!");
 		   
 		   return null;
@@ -70,7 +70,7 @@ public class Warrior extends Hero{
    @Override 
    public void doTurn(){
 		
-	   	Boolean correct = false;
+		Boolean correct = false;
 		Scanner kb = new Scanner(System.in);
 		String attackInput;
 		
@@ -126,10 +126,10 @@ public class Warrior extends Hero{
 					}
 				}
 				
-				else if(attackInput.toLowerCase().equals("2") || attackInput.toLowerCase().equals("cripple")){
+				else if(attackInput.toLowerCase().equals("2") || attackInput.toLowerCase().equals("lacerate")){
 					
 					correct = true;
-					System.out.println("Who do you wish to cripple? (Choose a number)");
+					System.out.println("Who do you wish to lacerate? (Choose a number)");
 					
 					for(int i = 0; i<this.currentCombat.getMonsters().size(); i++){
 						
@@ -139,7 +139,7 @@ public class Warrior extends Hero{
 					while(true){
 						try{
 							int choice = Integer.parseInt(kb.nextLine());
-							this.cripple(this.currentCombat.getMonsters().get(choice - 1));
+							this.lacerate(this.currentCombat.getMonsters().get(choice - 1));
 							break;
 						}
 						catch(Exception e){
@@ -167,5 +167,4 @@ public class Warrior extends Hero{
 		this.stats.setWis(this.stats.getWis()+ wisMod);
 		
 	}
-
 }

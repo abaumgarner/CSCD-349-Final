@@ -10,9 +10,7 @@ public abstract class GameCharacter implements Comparable<GameCharacter>{
 	protected Boolean isAlive;
 	protected String profession;
 
-	protected double str, dex, wis, vit, initiative;
-	protected double maxHP, currentHP;
-	protected int level, exp;
+	protected StatsObject stats;
 	protected ArrayList<Effect> effectsList = new ArrayList<Effect>();
 	
 	protected Combat currentCombat;
@@ -23,9 +21,24 @@ public abstract class GameCharacter implements Comparable<GameCharacter>{
 	public abstract void doTurn();
 	
 
-	public void addEffect(Effect newEffect) {
+	public boolean addEffect(Effect newEffect) {
 
-		this.effectsList.add(newEffect);
+		boolean duplicate = false;
+		
+		for(int i = 0; i < this.effectsList.size(); i++){
+			
+			if(this.effectsList.get(i).getName().equals(newEffect.getName())){
+				duplicate = true;
+			}
+		}
+		
+		if(!duplicate){
+			this.effectsList.add(newEffect);
+			return true;
+		}
+		
+		return false;
+		
 	}
 
 	public void removeEffect(Effect expiredEffect) {
@@ -45,138 +58,9 @@ public abstract class GameCharacter implements Comparable<GameCharacter>{
 
 	}
 
-	public double getCurrentHP() {
-
-		return this.currentHP;
-	}
-
-	public double getMaxHP() {
-
-		return this.maxHP;
-	}
-
-	public double getStr() {
-
-		return this.str;
-	}
-
-	public double getDex() {
-
-		return this.dex;
-	}
-
-	public double getWis() {
-
-		return this.wis;
-	}
-
-	public double getVit() {
-
-		return this.vit;
-	}
-
-	public int getLevel() {
-
-		return this.level;
-	}
-
-	public int getExp() {
-
-		return this.exp;
-	}
-
-	public double getInitiative() {
-		return this.initiative;
-	}
-
 	public void setName(String name) {
 
 		this.name = name;
-	}
-
-	public void setCurrentHP(double hp) {
-
-		this.currentHP = hp;
-	}
-
-	public void setStr(double stat) {
-
-		this.str = stat;
-	}
-
-	public void setDex(double stat) {
-
-		this.dex = stat;
-	}
-
-	public void setWis(double stat) {
-
-		this.wis = stat;
-	}
-
-	public void setVit(double stat) {
-
-		this.vit = stat;
-	}
-
-	public void setLevel(int lvl) {
-
-		if(lvl > this.level){
-			
-			this.level = lvl;
-			this.levelUpStats();
-			this.maxHP = calculateMaxHP();
-			this.exp = expTable[this.level-1];
-		}
-		else if(lvl == this.level){
-			System.out.println("This character is all ready level "+this.level);
-		}
-		else{
-			System.out.println("You can't de-level a character.");
-		}
-	}
-
-	public void setExp(int exp) {
-
-		this.exp = exp;
-		this.checkExp();
-	}
-
-	public void checkExp(){
-		
-		if(expTable[this.level] <= this.exp){
-			this.setLevel(this.level + 1);
-		}
-	}
-	public void setInitiative(double init) {
-
-		this.initiative = init;
-		
-		if(this.currentCombat != null){
-			this.currentCombat.sortInitiatives();
-		}
-	}
-
-	public void calculateInitiative() {
-
-		Random roll = new Random();
-
-		double base = (double) roll.nextInt(5);
-
-		double bonus = (double) roll.nextInt(this.level);
-
-		double dexBonus = ((this.dex - (10 + ((double) this.level - 1))));
-
-		if (dexBonus > 0) {
-
-			this.initiative = (base + bonus + dexBonus);
-		}
-
-		else {
-
-			this.initiative =  (base + bonus);
-		}
-
 	}
 
 	public boolean calculateHitChance(GameCharacter target) {
@@ -215,7 +99,7 @@ public abstract class GameCharacter implements Comparable<GameCharacter>{
 				
 				System.out.println(this.getName() + " strikes the enemy "
 						+ target.getName() + " for " + damage + " damage!");
-				target.setCurrentHP(target.getCurrentHP() - damage);
+				target.stats.setCurrentHP(target.stats.getCurrentHP() - damage);
 			}
 			else{
 				//treating 0 damage like a miss.
@@ -231,14 +115,52 @@ public abstract class GameCharacter implements Comparable<GameCharacter>{
 		}
 
 	}
+	
+	public void magicAttack(GameCharacter target) {
+
+		if (this.calculateHitChance(target)) {
+
+			double damage = this.calculateMagicDamage();
+			
+			if(damage > 0){
+				
+				System.out.println(this.getName() + " fires a magical bolt at the enemy "
+						+ target.getName() + " for " + damage + " damage!");
+				target.stats.setCurrentHP(target.stats.getCurrentHP() - damage);
+			}
+			else{
+				//treating 0 damage like a miss.
+				System.out.println(this.getName() + " tries to strike the enemy with magic "
+						+ target.getName() + " but misses!");
+			}
+		}
+
+		else {
+
+			System.out.println(this.getName() + " tries to strike the enemy with magic "
+					+ target.getName() + " but misses!");
+		}
+
+	}
+	
+	public double calculateMagicDamage(){
+		
+		Random roll = new Random();
+
+		double baseDamage = (double) roll.nextInt(4 + this.stats.getLevel());
+
+		double extraDamage = ((this.stats.getWis() - (10 + ((double) this.stats.getLevel() - 1)))) * .5;
+
+		return baseDamage + extraDamage;
+	}
 
 	public double calculateDamage() {
 
 		Random roll = new Random();
 
-		double baseDamage = (double) roll.nextInt(4 + this.level);
+		double baseDamage = (double) roll.nextInt(4 + this.stats.getLevel());
 
-		double extraDamage = ((this.str - (10 + ((double) this.level - 1)))) * .5;
+		double extraDamage = ((this.stats.getStr() - (10 + ((double) this.stats.getLevel() - 1)))) * .5;
 
 		return baseDamage + extraDamage;
 
@@ -250,7 +172,7 @@ public abstract class GameCharacter implements Comparable<GameCharacter>{
 		double normalChance = .8;
 
 		// dex affects hit chance by 1.5% per stat above or below normal
-		double dexFactor = ((this.dex - (10 + (this.level - 1)))) * .015;
+		double dexFactor = ((this.stats.getDex() - (10 + (this.stats.getLevel() - 1)))) * .015;
 
 		return normalChance + dexFactor;
 
@@ -259,10 +181,10 @@ public abstract class GameCharacter implements Comparable<GameCharacter>{
 	public double getMissFactor(GameCharacter target) {
 
 		double missFactor = 0, lvlFactor = 0;
-		double lvlDifference = this.level - target.level;
+		double lvlDifference = this.stats.getLevel() - target.stats.getLevel();
 
 		// dex affects dodge chance by .75% per dex above or below normal
-		double dexFactor = (target.dex - (10 + (target.level - 1))) * .0075;
+		double dexFactor = (target.stats.getDex() - (10 + (target.stats.getLevel() - 1))) * .0075;
 
 		if ((lvlDifference <= 5 && lvlDifference >= 0)
 				|| (lvlDifference >= -5 && lvlDifference <= 0)) {
@@ -297,13 +219,33 @@ public abstract class GameCharacter implements Comparable<GameCharacter>{
 	@Override
 	public int compareTo(GameCharacter other) {
 
-		if (this.initiative < other.initiative) {
+		if (this.stats.getInitiative() < other.stats.getInitiative()) {
 			return -1;
-		} else if (this.initiative > other.initiative) {
+		} 
+		else if (this.stats.getInitiative() > other.stats.getInitiative()) {
 			return 1;
-		} else {
-			return 0;
-		}
+		} 
+		else{
+			
+			if(this.stats.getLevel() < other.stats.getInitiative()){
+				return -1;
+			}
+			else if(this.stats.getLevel() > other.stats.getInitiative()){
+				return 1;
+			}
+			else{
+				
+				if(this.getProfession().toLowerCase().equals("monster") && (!other.getProfession().toLowerCase().equals("monster")) ){
+					return 1;
+				}
+				else if((!this.getProfession().toLowerCase().equals("monster")) && other.getProfession().toLowerCase().equals("monster") ){
+					return  -1;
+				}
+				else{
+					return 0;
+				}
+			}
+	    }
 	}
 
 	public String getProfession() {
@@ -311,8 +253,6 @@ public abstract class GameCharacter implements Comparable<GameCharacter>{
 		return this.profession;
 
 	}
-	
-	protected int[] expTable = {0, 200, 440, 728, 1074, 1489, 1987, 2584, 3301, 4161};
 	
 	
 }

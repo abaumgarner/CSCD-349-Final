@@ -21,18 +21,32 @@ public class HUDTester {
 		monsters.add(gob);
 		monsters.add(gob2);
 		
+		gob2.setName("Hobgoblin");
 		
+		System.out.printf("Party: %-50sMonsters:\n", "");
 		for(int i = 0; i < Math.max(heroes.size(), monsters.size()); i++){
-			System.out.printf(printString(heroes.get(i)));
+		
+			
+			System.out.printf(printHero(heroes.get(i))+"%-10s"+printMonster(monsters.get(i)),"");
+			System.out.println();
 		}
 	}
 	
-	public static String printString(GameCharacter character){
+	public static String printHero(GameCharacter character){
 		
 		String temp;
 		
-		temp = String.format("%-25s HP: %-5s/%-5s"+" Level: "+character.getLevel(),
-				"["+character.getName()+"]", character.getCurrentHP(), character.getMaxHP());
+		temp = String.format("%-20s Level: %-3s HP: %-5s/%5s",
+				"["+character.getName()+"]",character.stats.getLevel(), character.stats.getCurrentHP(), character.stats.getMaxHP());
+		return temp;
+	}
+	
+	public static String printMonster(GameCharacter character){
+		
+		String temp;
+		
+		temp = String.format("%-20s Level: %-3s HP: %-5s/%5s",
+				"["+character.getName()+"]",character.stats.getLevel(), character.stats.getCurrentHP(), character.stats.getMaxHP());
 		return temp;
 	}
 }
