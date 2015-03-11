@@ -3,16 +3,18 @@ package game_Shop;
 import java.util.ArrayList;
 import java.util.Random;
 
-import game_Items.GameItem;
+import game_Items.HealPotion;
 import game_Items.MajorHealthPotion;
 import game_Items.MinorHealthPotion;
 import game_Items.PotionOfHealth;
 
 public class GameShop {
-	private ArrayList<GameItem> shopItems;
+	private int numberOfItems = 5;
+
+	private ArrayList<HealPotion> shopItems;
 
 	public GameShop() {
-		shopItems = new ArrayList<GameItem>();
+		shopItems = new ArrayList<HealPotion>();
 		generateShopItems();
 	}
 
@@ -21,7 +23,7 @@ public class GameShop {
 		System.out.println("---------");
 		int i = 1;
 
-		for (GameItem item : shopItems)
+		for (HealPotion item : shopItems)
 			System.out.println((i++) + ". " + item.toString());
 	}
 
@@ -38,12 +40,17 @@ public class GameShop {
 			else if (randomInt < 20)
 				shopItems.add(new MajorHealthPotion());
 			shopItems.trimToSize();
-		} while (shopItems.size() < 10);
+		} while (shopItems.size() < numberOfItems);
 	}
 
-	public GameItem getShopItem(int location) {
-		return this.shopItems.get(location - 1);
+	public int shopSize() {
+		return shopItems.size();
 	}
-	
-	
+
+	public HealPotion getShopItem(int location) {
+		HealPotion item = this.shopItems.get(location - 1);
+
+		return item;
+	}
+
 }

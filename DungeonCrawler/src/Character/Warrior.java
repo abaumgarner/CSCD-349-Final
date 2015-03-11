@@ -150,7 +150,6 @@ public class Warrior extends Hero{
 				}
 			}//endwhile
 		}//endif
-		
 	}//end doTurn
 
 	@Override

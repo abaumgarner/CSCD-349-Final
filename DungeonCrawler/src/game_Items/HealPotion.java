@@ -1,6 +1,6 @@
 package game_Items;
 
-public abstract class HealPotion implements GameItem {
+public abstract class HealPotion extends GameItem {
 	private int healAmount;
 
 	void setHealAmount(int amount) {

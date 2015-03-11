@@ -52,16 +52,26 @@ public abstract class GameCharacter implements Comparable<GameCharacter>{
 
 	}
 
+	public void heal(int num) {
+		this.stats.heal(num);
+	}
+	
 	public String getRace() {
 
 		return this.race;
 
 	}
 
+	public StatsObject getStats()
+	{
+		return this.stats;
+	}//end getStats
+	
 	public void setName(String name) {
 
 		this.name = name;
 	}
+	
 
 	public boolean calculateHitChance(GameCharacter target) {
 

@@ -64,7 +64,6 @@ public class Rogue extends Hero {
 	   }
       
    
-      
    }
    
    @Override 
@@ -150,7 +149,6 @@ public class Rogue extends Hero {
 				}
 			}//endwhile
 		}//endif
-		
 	}//end doTurn
 
 	@Override

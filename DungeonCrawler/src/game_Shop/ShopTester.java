@@ -20,6 +20,16 @@ public class ShopTester {
 
 		System.out.println(item + " was purchased from the shop for "
 				+ item.getCost() + " gold.");
+
+		shop.displayShop();
+
+		System.out.print("Choice: ");
+		choice = kb.nextInt();
+
+		item = shop.getShopItem(choice);
+
+		System.out.println(item + " was purchased from the shop for "
+				+ item.getCost() + " gold.");
 	}
 
 }

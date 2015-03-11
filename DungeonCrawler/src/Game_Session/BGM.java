@@ -51,6 +51,7 @@ public class BGM{
 	}// end constructor
 
 	public void loop() {
+		clip.setFramePosition(0);
 		clip.loop(clip.LOOP_CONTINUOUSLY);
 	}// end loop
    

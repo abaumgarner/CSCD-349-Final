@@ -3,15 +3,16 @@ package Character;
 import java.util.Random;
 
 public class StatsObject {
-	
+
 	private GameCharacter owner;
 	private double str, dex, wis, vit, initiative;
 	private double maxHP, currentHP;
 	private int level, exp;
-	
-	protected int[] expTable = {0, 200, 440, 728, 1074, 1489, 1987, 2584, 3301, 4161};
-	
-	public StatsObject(GameCharacter owner){
+
+	protected int[] expTable = { 0, 200, 440, 728, 1074, 1489, 1987, 2584,
+			3301, 4161 };
+
+	public StatsObject(GameCharacter owner) {
 		this.owner = owner;
 	}
 
@@ -54,16 +55,23 @@ public class StatsObject {
 
 		return this.exp;
 	}
-	
+
 	public double getInitiative() {
 		return this.initiative;
 	}
-	
+
 	public void setCurrentHP(double hp) {
 
 		this.currentHP = hp;
 	}
-	
+
+	public void heal(int num) {
+		if ((this.currentHP + num) > this.maxHP)
+			this.currentHP = this.maxHP;
+		else
+			this.currentHP += num;
+	}
+
 	public void setMaxHP(double hp) {
 
 		this.maxHP = hp;
@@ -91,20 +99,18 @@ public class StatsObject {
 
 	public void setLevel(int lvl) {
 
-		if(this.level == 0){
+		if (this.level == 0) {
 			this.level = lvl;
-		}
-		else if(lvl > this.level){
-			
+		} else if (lvl > this.level) {
+
 			this.level = lvl;
 			owner.levelUpStats();
 			this.maxHP = owner.calculateMaxHP();
-			this.exp = expTable[this.level-1];
-		}
-		else if(lvl == this.level){
-			System.out.println("This character is all ready level "+this.level);
-		}
-		else{
+			this.exp = expTable[this.level - 1];
+		} else if (lvl == this.level) {
+			System.out.println("This character is all ready level "
+					+ this.level);
+		} else {
 			System.out.println("You can't de-level a character.");
 		}
 	}
@@ -115,17 +121,18 @@ public class StatsObject {
 		this.checkExp();
 	}
 
-	public void checkExp(){
-		
-		if(expTable[this.level] <= this.exp){
+	public void checkExp() {
+
+		if (expTable[this.level] <= this.exp) {
 			this.setLevel(this.level + 1);
 		}
 	}
+
 	public void setInitiative(double init) {
 
 		this.initiative = init;
-		
-		if(owner.currentCombat != null){
+
+		if (owner.currentCombat != null) {
 			owner.currentCombat.sortInitiatives();
 		}
 	}
@@ -147,7 +154,7 @@ public class StatsObject {
 
 		else {
 
-			this.initiative =  (base + bonus);
+			this.initiative = (base + bonus);
 		}
 
 	}
