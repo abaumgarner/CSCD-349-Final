@@ -10,23 +10,25 @@ public class Goblin extends Monster {
 	      this.profession = "Monster";
 	      this.race = "Goblin";
 	      
-	      this.level = 1;
-	      this.exp = 0;
+	      this.stats = new StatsObject(this);
+	      
+	      this.stats.setLevel(1);
+	      this.stats.setExp(0);
 	      this.expValue = 25;
 	   
-	      this.str = 10;
-	      this.dex = 10;
-	      this.wis = 8;
-	      this.vit = 8;
-	      this.maxHP = calculateMaxHP();
-	      this.currentHP = maxHP;
+	      this.stats.setStr(10);
+	      this.stats.setDex(10);
+	      this.stats.setWis(8);
+	      this.stats.setVit(8);
+	      this.stats.setMaxHP(calculateMaxHP());
+	      this.stats.setCurrentHP(this.stats.getMaxHP());
 	      
 	      this.isAlive = true;
 	}
 	
 	public double calculateMaxHP(){
 	      
-	      return 8 + this.vit + (2 * this.level);
+	      return 8 + this.stats.getVit() + (2 * this.stats.getLevel());
 	   
 	}
 	
@@ -104,10 +106,10 @@ public class Goblin extends Monster {
 		double wisMod = 1.0;
 		double vitMod = .5;
 		
-		this.dex += dexMod;
-		this.str += strMod;
-		this.wis += wisMod;
-		this.vit += vitMod;
+		this.stats.setDex(this.stats.getDex()+ dexMod);
+		this.stats.setStr(this.stats.getStr()+ strMod);
+		this.stats.setWis(this.stats.getWis()+ wisMod);
+		this.stats.setVit(this.stats.getVit()+ vitMod);
 	}
 	
 	@Override
@@ -122,7 +124,7 @@ public class Goblin extends Monster {
 			for(int i = 0; i < this.currentCombat.getHeroes().size(); i++){
 				
 				GameCharacter character = this.currentCombat.getHeroes().get(i);
-				character.setExp(character.getExp()+expValue);
+				character.stats.setExp(character.stats.getExp()+expValue);
 			}
 			
 		}

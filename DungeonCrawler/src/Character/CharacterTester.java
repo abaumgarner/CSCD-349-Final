@@ -10,8 +10,8 @@ public class CharacterTester {
 		warr.basicAttack(enemy);
 
 		// warr.setDex(10);
-		enemy.setDex(10);
-		enemy.setLevel(2);
+		enemy.stats.setDex(10);
+		enemy.stats.setLevel(2);
 
 		warr.basicAttack(enemy);
 

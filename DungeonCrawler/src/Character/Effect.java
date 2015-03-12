@@ -4,6 +4,7 @@ public abstract class Effect {
 
 	protected int duration;
 	protected String name, description;
+	protected GameCharacter affected;
 
 	public abstract void onApply(GameCharacter target);
 
@@ -27,14 +28,18 @@ public abstract class Effect {
 	}
 
 	protected void apply(GameCharacter target) {
-
-		target.addEffect(this);
-		this.onApply(target);
+		
+		if(target.addEffect(this)){
+		
+			this.affected= target;
+			this.onApply(target);
+		}
 	}
 
 	protected void remove(GameCharacter target) {
 
 		this.onRemoval(target);
+		this.affected = null;
 		target.removeEffect(this);
 	}
 }

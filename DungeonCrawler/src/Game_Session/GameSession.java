@@ -4,38 +4,34 @@ package Game_Session;
  CSCD349, Tom Capaul
  01/31/2015*/
 
+import game_Shop.GameShop;
+import game_Items.HealPotion;
+
 import java.util.Scanner;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.ArrayList;
-import java.io.IOException;
 
 import Maze_Setup.Maze;
 import Character.*;
-import Character.GameCharacter;
 
 public class GameSession {
 	final int PARTYSIZE = 3;
-	private String classes[] = { "", "Warrior", "Mage", "Ranger", "Cleric" };
+	private CharacterFactory factory = new CharacterFactory();
 	private Party party = new Party();
 	private boolean gameOver;
-	private boolean gameWon;
-	Scanner input;
-	BGMLibrary bgmLib;
-	SFXLibrary sfxLib;
+	private Scanner input;
+	protected BGMLibrary bgmLib;
+	protected SFXLibrary sfxLib;
+	protected GameShop shop;
 
 	public GameSession(Scanner scan) {
 		this.input = scan;
 		this.gameOver = false;
 	}// end constructor
 
-	private String characterClassName(String str) {
-		int num = Integer.parseInt(str);
-		return classes[num];
-	}// end characterClassName
-
-	private void credits() {
+	protected void credits() {
 		System.out.println("\nSPECIAL THANKS TO:\n");
 		System.out.println("www.bensoundmusic.com");
 		System.out.println("www.freesound.org");
@@ -43,11 +39,6 @@ public class GameSession {
 
 		System.out.println("\nTHE END\n");
 	}// end credits
-
-	private void displayClasses() {
-		for (int i = 1; i < classes.length; i++)
-			System.out.println(" " + i + " - " + classes[i]);
-	}// endDisplayClasses
 
 	private boolean foundExit(Maze maze) {
 		if (maze.playerInExit())
@@ -60,55 +51,33 @@ public class GameSession {
 		String classTitle = "";
 		int members = 0;
 		System.out.println("\nCHOOSE A PARTY OF " + PARTYSIZE + "\n");
+
 		while (members != 3) {
-			name = createCharacterName(input);
-			classTitle = createCharacterClass(name);
 			GameCharacter partyMember;
-			if (classTitle.compareTo("Warrior") == 0) {
-				partyMember = new Warrior();
+			name = createCharacterName(input);
+			System.out.println("CHOOSE A CLASS FOR YOUR HERO:");
+			factory.displayHeroTypes();
+
+			System.out.print("COMMAND: ");
+			int index = input.nextInt();
+			input.nextLine();
+
+			classTitle = factory.getHeroClassification(index);
+			partyMember = factory.spawnCharacter(classTitle);
+
+			if (partyMember != null) {
 				partyMember.setName(name);
 				party.addMember(partyMember);
+				members++;
 				System.out
 						.println("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 				System.out.println("\n " + partyMember.getName() + " the "
 						+ partyMember.getProfession() + " joins the party.\n");
 				System.out
 						.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
-				members++;
 			}// end if
-
-			else {
-				System.out
-						.println("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-				System.out
-						.println("\n That class is currently unavailable...\n");
-				System.out
-						.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
-			}// end else
 		}// end while
 	}// end generateParty
-
-	private String createCharacterClass(String heroName) {
-		String str = "";
-
-		System.out.println("\nHERO CLASSES:");
-		displayClasses();
-
-		System.out.print("\nEnter " + heroName + "'s class: ");
-		str = input.nextLine();
-
-		while (!regexCheck("[1-" + classes.length + "]", str)
-				|| str.length() == 0) {
-			if (!regexCheck("[1-" + classes.length + "]", str)
-					|| str.length() == 0) {
-				System.out.println("\n'" + str + "' is not a valid entry.");
-			}// end if
-
-			System.out.print("\nEnter a character class:");
-			str = input.nextLine();
-		}// end while
-		return characterClassName(str);
-	}// end getCharacterClass
 
 	private String createCharacterName(Scanner kb) {
 		String name = "";
@@ -120,6 +89,7 @@ public class GameSession {
 				System.out.print("\nPlease enter character name: ");
 			}// end if
 		}// end while
+
 		return name;
 	}// end getCharacterName
 
@@ -130,33 +100,80 @@ public class GameSession {
 		if (cmd.equals("help"))
 			printHelpOptions();
 
-		while (!cmd.equals("map") && !cmd.equals("status")) {
+		while (!cmd.equalsIgnoreCase("map") && !cmd.equalsIgnoreCase("status")
+				&& !cmd.equalsIgnoreCase("shop") && !cmd.equalsIgnoreCase("q")) {
 			System.out.println("\n(Type 'help' for a list of commands)\n");
 			System.out.print("PROMPT: ");
 			cmd = kb.nextLine();
 
 			if (cmd.equals("help"))
 				printHelpOptions();
-
 		}// end while
 		return cmd;
 	}// end getCommand
 
-	public void printHelpOptions() {
+	protected void printHelpOptions() {
 		System.out
 				.println("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 		System.out.println(" COMMANDS:\n");
-		System.out.println(" * 'map' - Open map to move character.");
-		System.out.println(" * 'status' - View current party Stats.");
+		System.out.println(" * 'map' - Open map to move your party.");
+		System.out.println(" * 'status' - View your party memebers' stats.");
+		System.out
+				.println(" * 'shop' - purchase useful items to aid your party.");
+		System.out.println(" * 'q' - ends the game.");
 		System.out
 				.println("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 	}// end help
 
-	public void getPartyStats() {
+	protected void getPartyStats() {
 		party.partyStats();
 	}// end getParty
 
-	public boolean isGameOver(Maze maze) {
+	protected void openShop(String cmd) {
+		System.out
+				.println("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+		System.out.println(" You enter the shop...");
+		System.out
+				.println("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+		shop.displayShop();
+		System.out.println("\nWelcome!");
+		while (!cmd.equals("q")) {
+			System.out
+					.println("(Enter item number to make a purchase, or 'q' to quit.");
+			System.out.print("\nItem Number: ");
+			cmd = input.nextLine();
+
+			if (regexCheck("[1-" + shop.shopSize() + "]{1}", cmd)) {
+				int itemNumber = Integer.parseInt(cmd);
+				HealPotion item = shop.getShopItem(itemNumber);
+				useItemOnCharacter(item);
+			}
+		}// end while
+		System.out
+				.println("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+		System.out.println(" You leave the shop...");
+		System.out
+				.println("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+	}// end openShop
+
+	private void useItemOnCharacter(HealPotion item) {
+		this.getPartyStats();
+		String characterToHeal;
+
+		do {
+			System.out.print("Enter the party member to add item to: ");
+			characterToHeal = input.nextLine();
+		} while (!party.findMember(characterToHeal));
+
+		for (GameCharacter member : party.getPartyMembers()) {
+			if (member.getName().equalsIgnoreCase(characterToHeal))
+				System.out
+						.println(member.getName() + " recovered some health.");
+		}
+
+	}
+
+	protected boolean isGameOver(Maze maze) {
 		if (party.isDefeated()) {
 			gameOver = true;
 			return gameOver;
@@ -167,6 +184,7 @@ public class GameSession {
 					.println("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 			System.out.println("\n CONGRATULATIONS!\n");
 			System.out.println(" you found the exit and won the game!\n");
+			credits();
 			System.out
 					.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
 			return gameOver;
@@ -175,7 +193,7 @@ public class GameSession {
 		return !maze.mazeTraversal();
 	}// end isGameOver
 
-	public String navigate(Maze maze) {
+	protected String navigate(Maze maze) {
 		String command = "";
 		while (!regexCheck("[wasdWASD]", command)) {
 			System.out.println("Which direction will you go?\n");
@@ -213,13 +231,13 @@ public class GameSession {
 		return command;
 	}// end navigate
 
-	public void newGame() {
+	protected void newGame() {
 		synopsis();
 		generateParty();
 		intro();
 	}// end newGame
 
-	private void printSplash() {
+	protected void printSplash() {
 
 		System.out
 				.println("  ___                                 ___                 _         ");
@@ -245,35 +263,30 @@ public class GameSession {
 		return matches;
 	}// end regexCheck
 
-	protected void initiateBattle(Maze maze, BGMLibrary bgmLibrary, SFXLibrary sfxLibrary) {
+	protected void initiateBattle(Maze maze, BGMLibrary bgmLibrary,
+			SFXLibrary sfxLibrary) {
 		Random randVal = new Random();
 		int result = randVal.nextInt(50);
 		// System.out.println("result = " + result);
 
-		if (result >= 25 || maze.playerInExit())
-		{
+		if (result >= 25 || maze.playerInExit()) {
 			System.out.println("BATTLE COMMENCED!");
 			ArrayList<GameCharacter> monsters = spawnMonsters();
 			Combat combat = new Combat(party.getPartyMembers(), monsters);
 			bgmLibrary.playBGM("battle.wav");
 			combat.run();
 			bgmLibrary.playBGM("cave.wav");
-		}//end if
+		}// end if
 	}// end initiateBattle
-	
-	private ArrayList<GameCharacter> spawnMonsters()
-	{
-		ArrayList<GameCharacter> monsters = new ArrayList<GameCharacter>();
-		Goblin gob1 = new Goblin();
-		Goblin gob2 = new Goblin();
-		Goblin gob3 = new Goblin();
-		monsters.add(gob1);
-		monsters.add(gob2);
-		monsters.add(gob3);
-		return monsters;
-	}//end spawnMonsters
 
-	public void intro() {
+	private ArrayList<GameCharacter> spawnMonsters() {
+		ArrayList<GameCharacter> monsters = new ArrayList<GameCharacter>();
+		for (int i = 0; i < 3; i++)
+			monsters.add(factory.randomMonster());
+		return monsters;
+	}// end spawnMonsters
+
+	protected void intro() {
 		System.out
 				.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 		System.out.println("\nYOUR JOURNEY BEGINS:\n");
@@ -293,7 +306,7 @@ public class GameSession {
 				.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
 	}// end intro
 
-	public void synopsis() {
+	protected void synopsis() {
 		System.out
 				.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 		System.out
@@ -310,12 +323,12 @@ public class GameSession {
 				.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 	}// end synopsis
 
-	public void titleScreen() {
+	protected void titleScreen() {
 		System.out
 				.println("\n===========================================================================");
 		printSplash();
 		System.out
-				.println("                                Ver. 0.5                                  ");
+				.println("                                Ver. 1.0                                  ");
 		System.out
 				.println("===========================================================================");
 		System.out

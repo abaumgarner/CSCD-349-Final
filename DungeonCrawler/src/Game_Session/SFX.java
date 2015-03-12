@@ -59,10 +59,6 @@ public class SFX{
 			e.printStackTrace();
 		}// end catch
 	}// end play
-
-	public void loop() {
-		clip.loop(clip.LOOP_CONTINUOUSLY);
-	}// end loop
    
    public String getTrackName()
    {

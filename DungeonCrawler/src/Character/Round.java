@@ -17,17 +17,25 @@ public class Round{
 			//iterate through characters in combat and give them a turn
 			if(this.currentCombat.getTurnOrder() != null){
 				
+				currentCombat.getHud().printHUD();
+				
 				for(int i = 0; i < this.currentCombat.getTurnOrder().size(); i++){
 					//do turns
-					if(currentCombat.stillAlive(currentCombat.getHeroes()) && currentCombat.stillAlive(currentCombat.getHeroes()) )
-					this.currentCombat.getTurnOrder().get(i).doTurn();
-					this.currentCombat.checkForDeaths();
+					if(currentCombat.stillAlive(currentCombat.getHeroes()) && currentCombat.stillAlive(currentCombat.getHeroes()) ){
+						
+						if(this.currentCombat.getTurnOrder().get(i).isAlive){
+							
+							this.currentCombat.getTurnOrder().get(i).doTurn();
+							this.currentCombat.checkForDeaths();
+						}
+					}
 				}
 				
 				
 				
 				//decrement effect durations
 				this.currentCombat.updateEffects();
+				this.currentCombat.checkForDeaths();
 				//increment round count and finish
 				this.currentCombat.setRoundCount(this.currentCombat.getRoundCount() + 1);
 			}	

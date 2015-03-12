@@ -11,6 +11,7 @@ public class Combat {
 	private ArrayList<GameCharacter> turnOrder;
 	private ArrayList<GameCharacter> heroes;
 	private ArrayList<GameCharacter> monsters;
+	private HUD hud;
 
 	public ArrayList<GameCharacter> getTurnOrder() {
 		return this.turnOrder;
@@ -20,6 +21,7 @@ public class Combat {
 		setRoundCount(0);
 		this.heroes = heroes;
 		this.monsters = monsters;
+		this.setHud(new HUD(this));
 
 	}
 	
@@ -38,6 +40,7 @@ public class Combat {
 		} else {
 
 			
+			//add the combat to characters and get turnOrder setup.
 			addCombatToCharacters(this);
 			organizeTurns();
 			combatStarted = true;
@@ -48,7 +51,17 @@ public class Combat {
 	public Boolean end() {
 		if (combatStarted) {
 			combatStarted = false;
+			
+			for(int i = 0; i <this.heroes.size(); i++ ){
+				
+				//remove all the combat from characters, and null out all effects on characters
+				this.heroes.get(i).currentCombat = null;
+				this.heroes.get(i).effectsList = new ArrayList<Effect>();
+			}
+			
 			return true;
+			
+			
 		} else {
 			System.out.println("Combat has not started, so you can't end it.");
 			return true;
@@ -60,10 +73,11 @@ public class Combat {
 		
 		this.start();
 		
+		//while each 'side' has a living member, keep doing turns.
 		while(stillAlive(heroes) && stillAlive(monsters)){
 			
 			this.currentRound = new Round(this);
-			System.out.println("---------- ROUND "+(this.roundCount+1)+"! ----------");
+			System.out.println("\n---------- ROUND "+(this.roundCount+1)+"! ----------");
 			this.currentRound.start();
 		}
 		
@@ -96,6 +110,7 @@ public class Combat {
 	}
 
 	public void addCombatToCharacters(Combat combat){
+		
 		for(GameCharacter hero : this.heroes){
 			hero.currentCombat = combat;
 		}
@@ -108,7 +123,7 @@ public class Combat {
 	public void checkForDeaths() {
 
 		for (int i = 0; i < this.heroes.size(); i++) {
-			if (this.heroes.get(i).currentHP <= 0) {
+			if (this.heroes.get(i).stats.getCurrentHP() <= 0) {
 				this.heroes.get(i).dies();
 				this.heroes.remove(i);
 				
@@ -123,7 +138,7 @@ public class Combat {
 		}
 
 		for (int i = 0; i < this.monsters.size(); i++) {
-			if (this.monsters.get(i).currentHP <= 0) {
+			if (this.monsters.get(i).stats.getCurrentHP() <= 0) {
 				this.monsters.get(i).dies();
 				this.monsters.remove(i);
 				
@@ -139,6 +154,8 @@ public class Combat {
 	}
 
 	public void updateEffects() {
+		
+		//check all the effects on characters in this combat, then decrement their duration. remove them if their duration == zero.
 
 		for (int i = 0; i<this.heroes.size(); i++) {
 
@@ -175,10 +192,12 @@ public class Combat {
 	}
 
 	public void setInitiatives() {
+		
+		//calculate new initiative values for everyone in the combat, then sort turnOrder
 
 		if (this.turnOrder != null) {
 			for (GameCharacter c : this.turnOrder) {
-				c.calculateInitiative();
+				c.stats.calculateInitiative();
 			}
 			
 			Collections.sort(turnOrder);
@@ -201,5 +220,14 @@ public class Combat {
 	public void setRoundCount(int roundCount) {
 		this.roundCount = roundCount;
 	}
+
+	public HUD getHud() {
+		return this.hud;
+	}
+
+	public void setHud(HUD hud) {
+		this.hud = hud;
+	}
+	
 	
 }
