@@ -1,26 +1,25 @@
 package Character;
 
-import java.util.ArrayList;
 import java.util.Random;
 
-public class EarthGolem extends Monster {
+public class Blob extends Monster {
 
-	public EarthGolem() {
+	public Blob() {
 
-		this.name = "Earth Golem";
+		this.name = "Blob";
 		this.profession = "Monster";
-		this.race = "Golem";
+		this.race = "Ameba";
 
 		this.stats = new StatsObject(this);
 
 		this.stats.setLevel(1);
 		this.stats.setExp(0);
-		this.expValue = 35;
+		this.expValue = 15;
 
-		this.stats.setStr(14);
-		this.stats.setDex(8);
-		this.stats.setWis(5);
-		this.stats.setVit(12);
+		this.stats.setStr(6);
+		this.stats.setDex(4);
+		this.stats.setWis(3);
+		this.stats.setVit(4);
 		this.stats.setMaxHP(calculateMaxHP());
 		this.stats.setCurrentHP(this.stats.getMaxHP());
 
@@ -41,9 +40,8 @@ public class EarthGolem extends Monster {
 
 			double val = roll.nextDouble();
 
-			if (val >= .8) {
-				this.earthQuake(this.currentCombat.getHeroes());
-
+			if (val >= .6) {
+				this.multiplySelf();
 			} else {
 
 				int choice = roll
@@ -53,28 +51,16 @@ public class EarthGolem extends Monster {
 		}
 	}
 
-	public void earthQuake(ArrayList<GameCharacter> heroes) {
-		System.out.println(this.getName()
-				+ " strikes the ground causing the room to shake...");
-		for (GameCharacter target : heroes) {
-			if (this.calculateHitChance(target)) {
-
-				double damage = this.calculateDamage() - 1;
-				if (damage <= 0) {
-					damage = 1;
-				}
-				System.out.println(target.getName() + " is hurt for " + damage
-						+ " damage!");
-				target.stats.setCurrentHP(target.stats.getCurrentHP() - damage);
-
-			}// end if
-
-			else {
-
-				System.out.println(target.getName() + " is  not affected.");
-			}// end else
-
-		}// end for
+	public void multiplySelf() {
+		System.out.println(this.name + " begins to split itself in two...");
+		GameCharacter blobOffspring = new Blob();
+		int currentLevel = this.getStats().getLevel();
+		if(currentLevel > 1)
+			blobOffspring.getStats().setLevel(currentLevel-1);
+		
+		this.currentCombat.getMonsters().add(blobOffspring);
+		System.out.println("A " + blobOffspring.getName() + " emerges!");
+		
 	}// end earthQuake
 
 	public void levelUpStats() {
@@ -111,3 +97,4 @@ public class EarthGolem extends Monster {
 
 	}
 }
+

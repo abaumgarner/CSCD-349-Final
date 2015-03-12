@@ -1,26 +1,25 @@
 package Character;
 
-import java.util.ArrayList;
 import java.util.Random;
 
-public class EarthGolem extends Monster {
+public class Vampire extends Monster {
 
-	public EarthGolem() {
+	public Vampire() {
 
-		this.name = "Earth Golem";
+		this.name = "Vampire";
 		this.profession = "Monster";
-		this.race = "Golem";
+		this.race = "Nosferatu";
 
 		this.stats = new StatsObject(this);
 
 		this.stats.setLevel(1);
 		this.stats.setExp(0);
-		this.expValue = 35;
+		this.expValue = 15;
 
-		this.stats.setStr(14);
-		this.stats.setDex(8);
-		this.stats.setWis(5);
-		this.stats.setVit(12);
+		this.stats.setStr(12);
+		this.stats.setDex(10);
+		this.stats.setWis(9);
+		this.stats.setVit(11);
 		this.stats.setMaxHP(calculateMaxHP());
 		this.stats.setCurrentHP(this.stats.getMaxHP());
 
@@ -41,9 +40,11 @@ public class EarthGolem extends Monster {
 
 			double val = roll.nextDouble();
 
-			if (val >= .8) {
-				this.earthQuake(this.currentCombat.getHeroes());
+			if (val >= .5) {
 
+				int choice = roll
+						.nextInt(this.currentCombat.getHeroes().size());
+				this.drain(this.currentCombat.getHeroes().get(choice));
 			} else {
 
 				int choice = roll
@@ -53,29 +54,29 @@ public class EarthGolem extends Monster {
 		}
 	}
 
-	public void earthQuake(ArrayList<GameCharacter> heroes) {
+	public void drain(GameCharacter target) {
 		System.out.println(this.getName()
-				+ " strikes the ground causing the room to shake...");
-		for (GameCharacter target : heroes) {
+				+ " attempts to suck "+ target.getName() + "'s blood...");
 			if (this.calculateHitChance(target)) {
 
 				double damage = this.calculateDamage() - 1;
 				if (damage <= 0) {
 					damage = 1;
 				}
-				System.out.println(target.getName() + " is hurt for " + damage
-						+ " damage!");
+				System.out.println(this.name + " drains " + target.getName() + " for " +  damage
+						+ " hitpoints and feels revitalized.");
 				target.stats.setCurrentHP(target.stats.getCurrentHP() - damage);
-
+				
+				if(this.getStats().getCurrentHP() + damage > this.getStats().getMaxHP())
+					this.getStats().setCurrentHP(this.getStats().getMaxHP());
+				else
+					this.getStats().setCurrentHP(damage);		
 			}// end if
 
-			else {
+			else 
+				System.out.println(target.getName() + " successfully wards off the " + this.getName());
 
-				System.out.println(target.getName() + " is  not affected.");
-			}// end else
-
-		}// end for
-	}// end earthQuake
+		}// end drain
 
 	public void levelUpStats() {
 

@@ -8,7 +8,7 @@ public class CharacterFactory {
 	private String[] heroTypes = { "", "Druid", "Mage", "Rogue", "Warrior" };
 
 	// update this array of monster types for randomMonster method
-	private String[] monsterTypes = { "Goblin", "EarthGolem" };
+	private String[] monsterTypes = { "Goblin", "EarthGolem", "Blob", "Vampire" };
 
 	public GameCharacter spawnCharacter(String classification) {
 		GameCharacter character = null;
@@ -41,10 +41,17 @@ public class CharacterFactory {
 			character = new EarthGolem();
 		}// end else if
 
+		else if (classification.equalsIgnoreCase("Blob")) {
+			character = new Blob();
+		}// end else if
+
+		else if (classification.equalsIgnoreCase("Vampire")) {
+			character = new Vampire();
+		}// end else if
+
 		/*---------------------------------------------------------*/
 		else {
-			System.out
-					.println("Character type not recognized.");
+			System.out.println("Character type not recognized.");
 		}// end else
 		return character;
 	}// end spawnCharacter
