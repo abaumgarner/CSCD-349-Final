@@ -66,6 +66,7 @@ public class StatsObject {
 	}
 
 	public void heal(int num) {
+		
 		if ((this.currentHP + num) > this.maxHP)
 			this.currentHP = this.maxHP;
 		else

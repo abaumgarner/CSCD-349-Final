@@ -31,5 +31,4 @@ public class ShopTester {
 		System.out.println(item + " was purchased from the shop for "
 				+ item.getCost() + " gold.");
 	}
-
 }
