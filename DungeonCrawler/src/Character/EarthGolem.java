@@ -17,7 +17,7 @@ public class EarthGolem extends Monster {
 		this.stats.setExp(0);
 		this.expValue = 35;
 
-		this.stats.setStr(14);
+		this.stats.setStr(12);
 		this.stats.setDex(8);
 		this.stats.setWis(5);
 		this.stats.setVit(12);
@@ -56,6 +56,7 @@ public class EarthGolem extends Monster {
 	public void earthQuake(ArrayList<GameCharacter> heroes) {
 		System.out.println(this.getName()
 				+ " strikes the ground causing the room to shake...");
+		this.getSFXLib().playTrack("rumble.wav");
 		for (GameCharacter target : heroes) {
 			if (this.calculateHitChance(target)) {
 
@@ -65,6 +66,7 @@ public class EarthGolem extends Monster {
 				}
 				System.out.println(target.getName() + " is hurt for " + damage
 						+ " damage!");
+				target.getSFXLib().playTrack("hurt.wav");
 				target.stats.setCurrentHP(target.stats.getCurrentHP() - damage);
 
 			}// end if

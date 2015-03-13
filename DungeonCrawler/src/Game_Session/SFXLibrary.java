@@ -30,7 +30,7 @@ public class SFXLibrary
       sfx.remove(track);
    }//end addToLibrary
    
-   protected void playTrack(String trackName)
+   public void playTrack(String trackName)
    {
 	   trackName = path + trackName; 
       for(SFX track: sfx)

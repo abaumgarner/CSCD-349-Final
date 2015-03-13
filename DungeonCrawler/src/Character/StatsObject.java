@@ -8,9 +8,13 @@ public class StatsObject {
 	private double str, dex, wis, vit, initiative;
 	private double maxHP, currentHP;
 	private int level, exp;
+	/*
+	 * protected int[] expTable = { 0, 200, 440, 728, 1074, 1489, 1987, 2584,
+	 * 3301, 4161 };
+	 */
 
-	protected int[] expTable = { 0, 200, 440, 728, 1074, 1489, 1987, 2584,
-			3301, 4161 };
+	protected int[] expTable = { 50, 100, 200, 400, 600, 800, 1000, 1200, 1400,
+			1600 };
 
 	public StatsObject(GameCharacter owner) {
 		this.owner = owner;
@@ -66,7 +70,7 @@ public class StatsObject {
 	}
 
 	public void heal(int num) {
-		
+
 		if ((this.currentHP + num) > this.maxHP)
 			this.currentHP = this.maxHP;
 		else

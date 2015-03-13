@@ -8,7 +8,8 @@ public class CharacterFactory {
 	private String[] heroTypes = { "", "Druid", "Mage", "Rogue", "Warrior" };
 
 	// update this array of monster types for randomMonster method
-	private String[] monsterTypes = { "Goblin", "EarthGolem", "Blob", "Vampire" };
+	private String[] monsterTypes = { "Blob", "Dragon", "EarthGolem", "Goblin",
+			"Vampire" };
 
 	public GameCharacter spawnCharacter(String classification) {
 		GameCharacter character = null;
@@ -33,17 +34,21 @@ public class CharacterFactory {
 		/*---------------------------------------------------------
 							MONSTER CLASSES	
 		----------------------------------------------------------*/
-		else if (classification.equalsIgnoreCase("Goblin")) {
-			character = new Goblin();
-		}// end if
+		else if (classification.equalsIgnoreCase("Blob")) {
+			character = new Blob();
+		}// end else if
+
+		else if (classification.equalsIgnoreCase("Dragon")) {
+			character = new Dragon();
+		}// end else if
 
 		else if (classification.equalsIgnoreCase("EarthGolem")) {
 			character = new EarthGolem();
 		}// end else if
 
-		else if (classification.equalsIgnoreCase("Blob")) {
-			character = new Blob();
-		}// end else if
+		else if (classification.equalsIgnoreCase("Goblin")) {
+			character = new Goblin();
+		}// end if
 
 		else if (classification.equalsIgnoreCase("Vampire")) {
 			character = new Vampire();
