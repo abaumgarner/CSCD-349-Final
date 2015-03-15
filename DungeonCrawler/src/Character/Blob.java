@@ -2,24 +2,24 @@ package Character;
 
 import java.util.Random;
 
-public class Goblin extends Monster {
+public class Blob extends Monster {
 
-	public Goblin() {
+	public Blob() {
 
-		this.name = "Goblin";
+		this.name = "Blob";
 		this.profession = "Monster";
-		this.race = "Goblin";
+		this.race = "Blob";
 
 		this.stats = new StatsObject(this);
 
 		this.stats.setLevel(1);
 		this.stats.setExp(0);
-		this.expValue = 25;
+		this.expValue = 15;
 
-		this.stats.setStr(9);
-		this.stats.setDex(10);
-		this.stats.setWis(8);
-		this.stats.setVit(8);
+		this.stats.setStr(6);
+		this.stats.setDex(4);
+		this.stats.setWis(3);
+		this.stats.setVit(3);
 		this.stats.setMaxHP(calculateMaxHP());
 		this.stats.setCurrentHP(this.stats.getMaxHP());
 
@@ -40,11 +40,8 @@ public class Goblin extends Monster {
 
 			double val = roll.nextDouble();
 
-			if (val >= .8) {
-
-				int choice = roll
-						.nextInt(this.currentCombat.getHeroes().size());
-				this.ankleShank(this.currentCombat.getHeroes().get(choice));
+			if (val >= .6) {
+				this.multiplySelf();
 			} else {
 
 				int choice = roll
@@ -54,48 +51,17 @@ public class Goblin extends Monster {
 		}
 	}
 
-	public void ankleShank(GameCharacter target) {
+	public void multiplySelf() {
+		System.out.println(this.name + " begins to split itself in two...");
+		GameCharacter blobOffspring = new Blob();
+		int currentLevel = this.getStats().getLevel();
+		if (currentLevel > 1)
+			blobOffspring.getStats().setLevel(currentLevel - 1);
 
-		if (this.calculateHitChance(target)) {
-
-			double damage = this.calculateDamage() - 1;
-			if (damage <= 0) {
-				damage = 1;
-			}
-
-			System.out.println("The " + this.getName() + " shanks "
-					+ target.getName() + "'s left ankle for " + damage
-					+ " damage!");
-
-		}
-
-		else {
-
-			System.out.println(this.getName() + " tries to shank  "
-					+ target.getName() + "'s left ankle but misses!");
-
-		}
-
-		if (this.calculateHitChance(target)) {
-
-			double damage = this.calculateDamage() - 1;
-			if (damage <= 0) {
-				damage = 1;
-			}
-			this.getSFXLib().playTrack("hurt.wav");
-			System.out.println("The " + this.getName() + " shanks "
-					+ target.getName() + "'s right ankle for " + damage
-					+ " damage!");
-			target.getSFXLib().playTrack("hurt.wav");
-		}
-
-		else {
-
-			System.out.println(this.getName() + " tries to shank  "
-					+ target.getName() + "'s right ankle but misses!");
-
-		}
-	}
+		this.currentCombat.getMonsters().add(blobOffspring);
+		this.getSFXLib().playTrack("multiply.wav");
+		System.out.println("A " + blobOffspring.getName() + " emerges!");
+	}// end multiplySelf
 
 	public void levelUpStats() {
 

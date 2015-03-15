@@ -2,43 +2,43 @@ package Character;
 
 import java.util.ArrayList;
 import java.util.Random;
+import Game_Session.SFXLibrary;
 
-public abstract class GameCharacter implements Comparable<GameCharacter>{
+public abstract class GameCharacter implements Comparable<GameCharacter> {
 
 	protected String name;
 	protected String race;
 	protected Boolean isAlive;
 	protected String profession;
-
 	protected StatsObject stats;
 	protected ArrayList<Effect> effectsList = new ArrayList<Effect>();
-	
+	protected SFXLibrary sfxLib = new SFXLibrary();
 	protected Combat currentCombat;
-	
+
 	protected abstract void levelUpStats();
+
 	protected abstract double calculateMaxHP();
-	
+
 	public abstract void doTurn();
-	
 
 	public boolean addEffect(Effect newEffect) {
 
 		boolean duplicate = false;
-		
-		for(int i = 0; i < this.effectsList.size(); i++){
-			
-			if(this.effectsList.get(i).getName().equals(newEffect.getName())){
+
+		for (int i = 0; i < this.effectsList.size(); i++) {
+
+			if (this.effectsList.get(i).getName().equals(newEffect.getName())) {
 				duplicate = true;
 			}
 		}
-		
-		if(!duplicate){
+
+		if (!duplicate) {
 			this.effectsList.add(newEffect);
 			return true;
 		}
-		
+
 		return false;
-		
+
 	}
 
 	public void removeEffect(Effect expiredEffect) {
@@ -52,16 +52,33 @@ public abstract class GameCharacter implements Comparable<GameCharacter>{
 
 	}
 
+	public void heal(int num) {
+		this.stats.heal(num);
+	}
+
 	public String getRace() {
 
 		return this.race;
 
 	}
 
+	public StatsObject getStats() {
+		return this.stats;
+	}// end getStats
+
 	public void setName(String name) {
 
 		this.name = name;
 	}
+
+	public void setSFXLib(SFXLibrary lib) {
+		sfxLib = lib;
+	}// end setSFXLib
+
+	public SFXLibrary getSFXLib() {
+
+		return this.sfxLib;
+	}// end getSFXLib
 
 	public boolean calculateHitChance(GameCharacter target) {
 
@@ -94,17 +111,18 @@ public abstract class GameCharacter implements Comparable<GameCharacter>{
 		if (this.calculateHitChance(target)) {
 
 			double damage = this.calculateDamage();
-			
-			if(damage > 0){
-				
+
+			if (damage > 0) {
+
 				System.out.println(this.getName() + " strikes the enemy "
 						+ target.getName() + " for " + damage + " damage!");
+				sfxLib.playTrack("attack.wav");
 				target.stats.setCurrentHP(target.stats.getCurrentHP() - damage);
-			}
-			else{
-				//treating 0 damage like a miss.
-				System.out.println(this.getName() + " tries to strike the enemy "
-						+ target.getName() + " but misses!");
+			} else {
+				// treating 0 damage like a miss.
+				System.out.println(this.getName()
+						+ " tries to strike the enemy " + target.getName()
+						+ " but misses!");
 			}
 		}
 
@@ -115,41 +133,46 @@ public abstract class GameCharacter implements Comparable<GameCharacter>{
 		}
 
 	}
-	
+
 	public void magicAttack(GameCharacter target) {
 
 		if (this.calculateHitChance(target)) {
 
 			double damage = this.calculateMagicDamage();
-			
-			if(damage > 0){
-				
-				System.out.println(this.getName() + " fires a magical bolt at the enemy "
+
+			if (damage > 0) {
+
+				System.out.println(this.getName()
+						+ " fires a magical bolt at the enemy "
 						+ target.getName() + " for " + damage + " damage!");
+				sfxLib.playTrack("magic.wav");
+
 				target.stats.setCurrentHP(target.stats.getCurrentHP() - damage);
-			}
-			else{
-				//treating 0 damage like a miss.
-				System.out.println(this.getName() + " tries to strike the enemy with magic "
+			} else {
+				// treating 0 damage like a miss.
+				System.out.println(this.getName()
+						+ " tries to strike the enemy with magic "
 						+ target.getName() + " but misses!");
 			}
 		}
 
 		else {
 
-			System.out.println(this.getName() + " tries to strike the enemy with magic "
+			System.out.println(this.getName()
+					+ " tries to strike the enemy with magic "
 					+ target.getName() + " but misses!");
 		}
 
 	}
-	
-	public double calculateMagicDamage(){
-		
+
+	public double calculateMagicDamage() {
+
 		Random roll = new Random();
 
 		double baseDamage = (double) roll.nextInt(4 + this.stats.getLevel());
 
-		double extraDamage = ((this.stats.getWis() - (10 + ((double) this.stats.getLevel() - 1)))) * .5;
+		double extraDamage = ((this.stats.getWis() - (10 + ((double) this.stats
+				.getLevel() - 1)))) * .5;
 
 		return baseDamage + extraDamage;
 	}
@@ -160,7 +183,8 @@ public abstract class GameCharacter implements Comparable<GameCharacter>{
 
 		double baseDamage = (double) roll.nextInt(4 + this.stats.getLevel());
 
-		double extraDamage = ((this.stats.getStr() - (10 + ((double) this.stats.getLevel() - 1)))) * .5;
+		double extraDamage = ((this.stats.getStr() - (10 + ((double) this.stats
+				.getLevel() - 1)))) * .5;
 
 		return baseDamage + extraDamage;
 
@@ -184,7 +208,8 @@ public abstract class GameCharacter implements Comparable<GameCharacter>{
 		double lvlDifference = this.stats.getLevel() - target.stats.getLevel();
 
 		// dex affects dodge chance by .75% per dex above or below normal
-		double dexFactor = (target.stats.getDex() - (10 + (target.stats.getLevel() - 1))) * .0075;
+		double dexFactor = (target.stats.getDex() - (10 + (target.stats
+				.getLevel() - 1))) * .0075;
 
 		if ((lvlDifference <= 5 && lvlDifference >= 0)
 				|| (lvlDifference >= -5 && lvlDifference <= 0)) {
@@ -221,31 +246,30 @@ public abstract class GameCharacter implements Comparable<GameCharacter>{
 
 		if (this.stats.getInitiative() < other.stats.getInitiative()) {
 			return -1;
-		} 
-		else if (this.stats.getInitiative() > other.stats.getInitiative()) {
+		} else if (this.stats.getInitiative() > other.stats.getInitiative()) {
 			return 1;
-		} 
-		else{
-			
-			if(this.stats.getLevel() < other.stats.getInitiative()){
+		} else {
+
+			if (this.stats.getLevel() < other.stats.getInitiative()) {
 				return -1;
-			}
-			else if(this.stats.getLevel() > other.stats.getInitiative()){
+			} else if (this.stats.getLevel() > other.stats.getInitiative()) {
 				return 1;
-			}
-			else{
-				
-				if(this.getProfession().toLowerCase().equals("monster") && (!other.getProfession().toLowerCase().equals("monster")) ){
+			} else {
+
+				if (this.getProfession().toLowerCase().equals("monster")
+						&& (!other.getProfession().toLowerCase()
+								.equals("monster"))) {
 					return 1;
-				}
-				else if((!this.getProfession().toLowerCase().equals("monster")) && other.getProfession().toLowerCase().equals("monster") ){
-					return  -1;
-				}
-				else{
+				} else if ((!this.getProfession().toLowerCase()
+						.equals("monster"))
+						&& other.getProfession().toLowerCase()
+								.equals("monster")) {
+					return -1;
+				} else {
 					return 0;
 				}
 			}
-	    }
+		}
 	}
 
 	public String getProfession() {
@@ -253,6 +277,5 @@ public abstract class GameCharacter implements Comparable<GameCharacter>{
 		return this.profession;
 
 	}
-	
-	
+
 }

@@ -2,24 +2,24 @@ package Character;
 
 import java.util.Random;
 
-public class Goblin extends Monster {
+public class Vampire extends Monster {
 
-	public Goblin() {
+	public Vampire() {
 
-		this.name = "Goblin";
+		this.name = "Vampire";
 		this.profession = "Monster";
-		this.race = "Goblin";
+		this.race = "Vampire";
 
 		this.stats = new StatsObject(this);
 
 		this.stats.setLevel(1);
 		this.stats.setExp(0);
-		this.expValue = 25;
+		this.expValue = 15;
 
-		this.stats.setStr(9);
+		this.stats.setStr(11);
 		this.stats.setDex(10);
-		this.stats.setWis(8);
-		this.stats.setVit(8);
+		this.stats.setWis(9);
+		this.stats.setVit(9);
 		this.stats.setMaxHP(calculateMaxHP());
 		this.stats.setCurrentHP(this.stats.getMaxHP());
 
@@ -40,11 +40,11 @@ public class Goblin extends Monster {
 
 			double val = roll.nextDouble();
 
-			if (val >= .8) {
+			if (val >= .5) {
 
 				int choice = roll
 						.nextInt(this.currentCombat.getHeroes().size());
-				this.ankleShank(this.currentCombat.getHeroes().get(choice));
+				this.drain(this.currentCombat.getHeroes().get(choice));
 			} else {
 
 				int choice = roll
@@ -54,8 +54,9 @@ public class Goblin extends Monster {
 		}
 	}
 
-	public void ankleShank(GameCharacter target) {
-
+	public void drain(GameCharacter target) {
+		System.out.println(this.getName() + " attempts to suck "
+				+ target.getName() + "'s blood...");
 		if (this.calculateHitChance(target)) {
 
 			double damage = this.calculateDamage() - 1;
@@ -63,39 +64,26 @@ public class Goblin extends Monster {
 				damage = 1;
 			}
 
-			System.out.println("The " + this.getName() + " shanks "
-					+ target.getName() + "'s left ankle for " + damage
-					+ " damage!");
+			double currentHP = this.getStats().getCurrentHP();
+			double maxHP = this.getStats().getMaxHP();
 
-		}
+			if (currentHP + damage > maxHP)
+				this.getStats().setCurrentHP(maxHP);
+			else
+				this.getStats().setCurrentHP(currentHP + damage);
 
-		else {
-
-			System.out.println(this.getName() + " tries to shank  "
-					+ target.getName() + "'s left ankle but misses!");
-
-		}
-
-		if (this.calculateHitChance(target)) {
-
-			double damage = this.calculateDamage() - 1;
-			if (damage <= 0) {
-				damage = 1;
-			}
-			this.getSFXLib().playTrack("hurt.wav");
-			System.out.println("The " + this.getName() + " shanks "
-					+ target.getName() + "'s right ankle for " + damage
-					+ " damage!");
+			System.out.println(this.name + " drains " + target.getName()
+					+ " for " + damage + " hitpoints!");
 			target.getSFXLib().playTrack("hurt.wav");
-		}
+			target.stats.setCurrentHP(target.stats.getCurrentHP() - damage);
 
-		else {
+		}// end if
 
-			System.out.println(this.getName() + " tries to shank  "
-					+ target.getName() + "'s right ankle but misses!");
+		else
+			System.out.println(target.getName()
+					+ " successfully wards off the " + this.getName());
 
-		}
-	}
+	}// end drain
 
 	public void levelUpStats() {
 

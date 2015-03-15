@@ -17,19 +17,20 @@ public class Combat {
 		return this.turnOrder;
 	}
 
-	public Combat(ArrayList<GameCharacter> heroes, ArrayList<GameCharacter> monsters) {
+	public Combat(ArrayList<GameCharacter> heroes,
+			ArrayList<GameCharacter> monsters) {
 		setRoundCount(0);
 		this.heroes = heroes;
 		this.monsters = monsters;
 		this.setHud(new HUD(this));
 
 	}
-	
-	public ArrayList<GameCharacter> getMonsters(){
+
+	public ArrayList<GameCharacter> getMonsters() {
 		return this.monsters;
 	}
-	
-	public ArrayList<GameCharacter> getHeroes(){
+
+	public ArrayList<GameCharacter> getHeroes() {
 		return this.heroes;
 	}
 
@@ -39,8 +40,7 @@ public class Combat {
 			return false;
 		} else {
 
-			
-			//add the combat to characters and get turnOrder setup.
+			// add the combat to characters and get turnOrder setup.
 			addCombatToCharacters(this);
 			organizeTurns();
 			combatStarted = true;
@@ -51,17 +51,17 @@ public class Combat {
 	public Boolean end() {
 		if (combatStarted) {
 			combatStarted = false;
-			
-			for(int i = 0; i <this.heroes.size(); i++ ){
-				
-				//remove all the combat from characters, and null out all effects on characters
+
+			for (int i = 0; i < this.heroes.size(); i++) {
+
+				// remove all the combat from characters, and null out all
+				// effects on characters
 				this.heroes.get(i).currentCombat = null;
 				this.heroes.get(i).effectsList = new ArrayList<Effect>();
 			}
-			
+
 			return true;
-			
-			
+
 		} else {
 			System.out.println("Combat has not started, so you can't end it.");
 			return true;
@@ -70,69 +70,67 @@ public class Combat {
 	}
 
 	public void run() {
-		
+
 		this.start();
-		
-		//while each 'side' has a living member, keep doing turns.
-		while(stillAlive(heroes) && stillAlive(monsters)){
-			
+
+		// while each 'side' has a living member, keep doing turns.
+		while (stillAlive(heroes) && stillAlive(monsters)) {
+
 			this.currentRound = new Round(this);
-			System.out.println("\n---------- ROUND "+(this.roundCount+1)+"! ----------");
+			System.out.println("\n---------- ROUND " + (this.roundCount + 1)
+					+ "! ----------");
 			this.currentRound.start();
 		}
-		
+
 		this.end();
 
 	}
-	
-	public boolean stillAlive(ArrayList<GameCharacter> gameCharacters){
-		
+
+	public boolean stillAlive(ArrayList<GameCharacter> gameCharacters) {
+
 		int dead = 0;
-		if(gameCharacters.isEmpty()){
+		if (gameCharacters.isEmpty()) {
 			return false;
-		}
-		else{
-			//iterate through the list and count how many are dead
-			for(GameCharacter GameCharacter : gameCharacters){
-				if(!GameCharacter.isAlive){
-					
+		} else {
+			// iterate through the list and count how many are dead
+			for (GameCharacter GameCharacter : gameCharacters) {
+				if (!GameCharacter.isAlive) {
+
 					dead++;
 				}
 			}
-			//if ALL of the GameCharacters in this list are dead, return false
-			if(dead == gameCharacters.size()){
+			// if ALL of the GameCharacters in this list are dead, return false
+			if (dead == gameCharacters.size()) {
 				return false;
-			}
-			else{
+			} else {
 				return true;
 			}
 		}
 	}
 
-	public void addCombatToCharacters(Combat combat){
-		
-		for(GameCharacter hero : this.heroes){
+	public void addCombatToCharacters(Combat combat) {
+
+		for (GameCharacter hero : this.heroes) {
 			hero.currentCombat = combat;
 		}
-		
-		for(GameCharacter monster : this.monsters){
+
+		for (GameCharacter monster : this.monsters) {
 			monster.currentCombat = combat;
 		}
 	}
-	
+
 	public void checkForDeaths() {
 
 		for (int i = 0; i < this.heroes.size(); i++) {
 			if (this.heroes.get(i).stats.getCurrentHP() <= 0) {
 				this.heroes.get(i).dies();
 				this.heroes.remove(i);
-				
-				
-				for(int j = 0; j < this.turnOrder.size(); j++){
-					
+
+				for (int j = 0; j < this.turnOrder.size(); j++) {
+
 					this.turnOrder.remove(j);
 					break;
-					
+
 				}
 			}
 		}
@@ -141,10 +139,9 @@ public class Combat {
 			if (this.monsters.get(i).stats.getCurrentHP() <= 0) {
 				this.monsters.get(i).dies();
 				this.monsters.remove(i);
-				
-				
-				for(int j = 0; j < this.turnOrder.size(); j++){
-					
+
+				for (int j = 0; j < this.turnOrder.size(); j++) {
+
 					this.turnOrder.remove(j);
 					break;
 				}
@@ -154,28 +151,31 @@ public class Combat {
 	}
 
 	public void updateEffects() {
-		
-		//check all the effects on characters in this combat, then decrement their duration. remove them if their duration == zero.
 
-		for (int i = 0; i<this.heroes.size(); i++) {
+		// check all the effects on characters in this combat, then decrement
+		// their duration. remove them if their duration == zero.
 
-			for (int j = 0; j<this.heroes.get(i).effectsList.size(); j++) {
+		for (int i = 0; i < this.heroes.size(); i++) {
+
+			for (int j = 0; j < this.heroes.get(i).effectsList.size(); j++) {
 
 				this.heroes.get(i).effectsList.get(j).decreaseDuration();
 				if (this.heroes.get(i).effectsList.get(j).duration == 0) {
-					this.heroes.get(i).effectsList.get(j).remove(this.heroes.get(i));
+					this.heroes.get(i).effectsList.get(j).remove(
+							this.heroes.get(i));
 				}
 			}
 		}
 
-		for (int i = 0; i<this.monsters.size(); i++) {
+		for (int i = 0; i < this.monsters.size(); i++) {
 
-			for (int j = 0; j<this.monsters.get(i).effectsList.size(); j++) {
+			for (int j = 0; j < this.monsters.get(i).effectsList.size(); j++) {
 
 				this.monsters.get(i).effectsList.get(j).decreaseDuration();
 				if (this.monsters.get(i).effectsList.get(j).duration == 0) {
-					
-					this.monsters.get(i).effectsList.get(j).remove(this.monsters.get(i));
+
+					this.monsters.get(i).effectsList.get(j).remove(
+							this.monsters.get(i));
 				}
 			}
 		}
@@ -192,22 +192,23 @@ public class Combat {
 	}
 
 	public void setInitiatives() {
-		
-		//calculate new initiative values for everyone in the combat, then sort turnOrder
+
+		// calculate new initiative values for everyone in the combat, then sort
+		// turnOrder
 
 		if (this.turnOrder != null) {
 			for (GameCharacter c : this.turnOrder) {
 				c.stats.calculateInitiative();
 			}
-			
+
 			Collections.sort(turnOrder);
 		} else {
 			System.out.println("turnOrder is null, can't calc initiatives.");
 		}
 	}
-	
-	public void sortInitiatives(){
-		
+
+	public void sortInitiatives() {
+
 		if (this.turnOrder != null) {
 			Collections.sort(turnOrder);
 		}
@@ -228,6 +229,5 @@ public class Combat {
 	public void setHud(HUD hud) {
 		this.hud = hud;
 	}
-	
-	
+
 }
