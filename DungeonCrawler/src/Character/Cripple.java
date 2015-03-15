@@ -17,13 +17,12 @@ public class Cripple extends Effect {
 		double currentInit = target.stats.getInitiative();
 		target.stats.setInitiative(currentInit - 8);
 
-		if(this.affected.getProfession().equals("Monster")){
-			message = "The "+affected.getRace()+" has been crippled!";
+		if (this.affected.getProfession().equals("Monster")) {
+			message = "The " + affected.getRace() + " has been crippled!";
+		} else {
+			message = affected.getName() + " has been crippled!";
 		}
-		else{
-			message = affected.getName()+" has been crippled!";
-		}
-		
+
 		System.out.println(message);
 	}
 

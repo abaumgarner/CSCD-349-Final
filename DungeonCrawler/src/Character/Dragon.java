@@ -1,25 +1,26 @@
 package Character;
 
+import java.util.ArrayList;
 import java.util.Random;
 
-public class Goblin extends Monster {
+public class Dragon extends Monster {
 
-	public Goblin() {
+	public Dragon() {
 
-		this.name = "Goblin";
+		this.name = "Dragon";
 		this.profession = "Monster";
-		this.race = "Goblin";
+		this.race = "Dragon";
 
 		this.stats = new StatsObject(this);
 
 		this.stats.setLevel(1);
 		this.stats.setExp(0);
-		this.expValue = 25;
+		this.expValue = 100;
 
-		this.stats.setStr(9);
-		this.stats.setDex(10);
-		this.stats.setWis(8);
-		this.stats.setVit(8);
+		this.stats.setStr(18);
+		this.stats.setDex(15);
+		this.stats.setWis(12);
+		this.stats.setVit(20);
 		this.stats.setMaxHP(calculateMaxHP());
 		this.stats.setCurrentHP(this.stats.getMaxHP());
 
@@ -41,11 +42,15 @@ public class Goblin extends Monster {
 			double val = roll.nextDouble();
 
 			if (val >= .8) {
+				this.breatheFire(this.currentCombat.getHeroes());
+			}
 
-				int choice = roll
-						.nextInt(this.currentCombat.getHeroes().size());
-				this.ankleShank(this.currentCombat.getHeroes().get(choice));
-			} else {
+			else if (val >= .5 && val <= .8) {
+
+				this.tailAttack(this.currentCombat.getHeroes());
+			}// end else if
+
+			else {
 
 				int choice = roll
 						.nextInt(this.currentCombat.getHeroes().size());
@@ -54,48 +59,39 @@ public class Goblin extends Monster {
 		}
 	}
 
-	public void ankleShank(GameCharacter target) {
+	public void breatheFire(ArrayList<GameCharacter> heroes) {
 
-		if (this.calculateHitChance(target)) {
-
+		System.out.println("embers emit from the " + this.getName()
+				+ " mouth...");
+		this.getSFXLib().playTrack("fire.wav");
+		for (GameCharacter target : heroes) {
 			double damage = this.calculateDamage() - 1;
-			if (damage <= 0) {
+			if (damage <= 0)
 				damage = 1;
-			}
-
-			System.out.println("The " + this.getName() + " shanks "
-					+ target.getName() + "'s left ankle for " + damage
-					+ " damage!");
-
-		}
-
-		else {
-
-			System.out.println(this.getName() + " tries to shank  "
-					+ target.getName() + "'s left ankle but misses!");
-
-		}
-
-		if (this.calculateHitChance(target)) {
-
-			double damage = this.calculateDamage() - 1;
-			if (damage <= 0) {
-				damage = 1;
-			}
-			this.getSFXLib().playTrack("hurt.wav");
-			System.out.println("The " + this.getName() + " shanks "
-					+ target.getName() + "'s right ankle for " + damage
-					+ " damage!");
+			System.out.println("The " + this.getName() + " breathes fire and "
+					+ target.getName() + " receives " + damage + " damage!");
 			target.getSFXLib().playTrack("hurt.wav");
-		}
 
-		else {
+		}// end for
 
-			System.out.println(this.getName() + " tries to shank  "
-					+ target.getName() + "'s right ankle but misses!");
+	}// end breatheFire
 
-		}
-	}
+	public void tailAttack(ArrayList<GameCharacter> heroes) {
+
+		System.out.println("The " + this.getName()
+				+ " sweeps its barbed tail across the floor...");
+		this.getSFXLib().playTrack("rumble.wav");
+		for (GameCharacter target : heroes) {
+			double damage = this.calculateDamage() - 1;
+			if (damage <= 0)
+				damage = 1;
+			System.out.println(target.getName() + "'receives " + damage
+					+ " damage!");
+			target.getSFXLib().playTrack("hurt");
+
+		}// end for
+
+	}// end breatheFire
 
 	public void levelUpStats() {
 

@@ -10,7 +10,7 @@ public class ANSI {
 	private final String ANSI_PURPLE = "\u001B[35m";
 	private final String ANSI_CYAN = "\u001B[36m";
 	private final String ANSI_WHITE = "\u001B[37m";
-	
+
 	public String getANSI_RESET() {
 		return ANSI_RESET;
 	}
@@ -42,7 +42,7 @@ public class ANSI {
 	public String getANSI_CYAN() {
 		return ANSI_CYAN;
 	}
-	
+
 	public String getANSI_WHITE() {
 		return ANSI_WHITE;
 	}

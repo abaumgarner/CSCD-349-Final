@@ -1,25 +1,26 @@
 package Character;
 
+import java.util.ArrayList;
 import java.util.Random;
 
-public class Goblin extends Monster {
+public class EarthGolem extends Monster {
 
-	public Goblin() {
+	public EarthGolem() {
 
-		this.name = "Goblin";
+		this.name = "Earth Golem";
 		this.profession = "Monster";
-		this.race = "Goblin";
+		this.race = "Golem";
 
 		this.stats = new StatsObject(this);
 
 		this.stats.setLevel(1);
 		this.stats.setExp(0);
-		this.expValue = 25;
+		this.expValue = 35;
 
-		this.stats.setStr(9);
-		this.stats.setDex(10);
-		this.stats.setWis(8);
-		this.stats.setVit(8);
+		this.stats.setStr(12);
+		this.stats.setDex(8);
+		this.stats.setWis(5);
+		this.stats.setVit(12);
 		this.stats.setMaxHP(calculateMaxHP());
 		this.stats.setCurrentHP(this.stats.getMaxHP());
 
@@ -41,10 +42,8 @@ public class Goblin extends Monster {
 			double val = roll.nextDouble();
 
 			if (val >= .8) {
+				this.earthQuake(this.currentCombat.getHeroes());
 
-				int choice = roll
-						.nextInt(this.currentCombat.getHeroes().size());
-				this.ankleShank(this.currentCombat.getHeroes().get(choice));
 			} else {
 
 				int choice = roll
@@ -54,48 +53,31 @@ public class Goblin extends Monster {
 		}
 	}
 
-	public void ankleShank(GameCharacter target) {
+	public void earthQuake(ArrayList<GameCharacter> heroes) {
+		System.out.println(this.getName()
+				+ " strikes the ground causing the room to shake...");
+		this.getSFXLib().playTrack("rumble.wav");
+		for (GameCharacter target : heroes) {
+			if (this.calculateHitChance(target)) {
 
-		if (this.calculateHitChance(target)) {
+				double damage = this.calculateDamage() - 1;
+				if (damage <= 0) {
+					damage = 1;
+				}
+				System.out.println(target.getName() + " is hurt for " + damage
+						+ " damage!");
+				target.getSFXLib().playTrack("hurt.wav");
+				target.stats.setCurrentHP(target.stats.getCurrentHP() - damage);
 
-			double damage = this.calculateDamage() - 1;
-			if (damage <= 0) {
-				damage = 1;
-			}
+			}// end if
 
-			System.out.println("The " + this.getName() + " shanks "
-					+ target.getName() + "'s left ankle for " + damage
-					+ " damage!");
+			else {
 
-		}
+				System.out.println(target.getName() + " is  not affected.");
+			}// end else
 
-		else {
-
-			System.out.println(this.getName() + " tries to shank  "
-					+ target.getName() + "'s left ankle but misses!");
-
-		}
-
-		if (this.calculateHitChance(target)) {
-
-			double damage = this.calculateDamage() - 1;
-			if (damage <= 0) {
-				damage = 1;
-			}
-			this.getSFXLib().playTrack("hurt.wav");
-			System.out.println("The " + this.getName() + " shanks "
-					+ target.getName() + "'s right ankle for " + damage
-					+ " damage!");
-			target.getSFXLib().playTrack("hurt.wav");
-		}
-
-		else {
-
-			System.out.println(this.getName() + " tries to shank  "
-					+ target.getName() + "'s right ankle but misses!");
-
-		}
-	}
+		}// end for
+	}// end earthQuake
 
 	public void levelUpStats() {
 
@@ -115,7 +97,7 @@ public class Goblin extends Monster {
 
 		if (this.currentCombat != null
 				&& this.currentCombat.getTurnOrder() != null) {
-			this.getSFXLib().playTrack("die.wav");
+
 			System.out.println(this.name
 					+ " has been slain, awarding the party " + this.expValue
 					+ " experience points!");
