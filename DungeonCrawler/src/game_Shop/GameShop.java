@@ -19,12 +19,14 @@ public class GameShop {
 	}
 
 	public void displayShop() {
-		System.out.println("Game Shop");
-		System.out.println("---------");
+		System.out.println("\n-----------------------------------");
+		System.out.printf("%-13sGAME SHOP\n", "");
+		System.out.println("-----------------------------------");
 		int i = 1;
 
 		for (HealPotion item : shopItems)
 			System.out.println((i++) + ". " + item.toString());
+		System.out.println("-----------------------------------\n");
 	}
 
 	private void generateShopItems() {

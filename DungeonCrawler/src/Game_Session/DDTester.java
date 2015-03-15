@@ -5,9 +5,6 @@ package Game_Session;
  01/31/2015*/
 
 import java.util.Scanner;
-import Maze_Setup.Maze;
-import Maze_Setup.MazeBuilder;
-import game_Shop.GameShop;
 
 public class DDTester {
 	public static void main(String[] args) {
@@ -15,41 +12,13 @@ public class DDTester {
 		Scanner input = new Scanner(System.in);
 		GameSession game = new GameSession(input);
 
-		SFXLibrary sfxLibrary = new SFXLibrary();
-		BGMLibrary bgmLibrary = new BGMLibrary();
-
-		game.titleScreen();
-		game.newGame();
-
-		// build maze...
-		MazeBuilder builder = new MazeBuilder(5);
-		Maze maze = builder.build();
-
-		// add BGM files to library...
-		bgmLibrary.add("cave.wav");
-		bgmLibrary.add("battle.wav");
-
-		// add SFX files to library...
-		sfxLibrary.add("footsteps.wav");
-		sfxLibrary.add("attack.wav");
-		sfxLibrary.add("hurt.wav");
-		sfxLibrary.add("arrow.wav");
-		sfxLibrary.add("magic.wav");
-
-		// add shop...
-		game.shop = new GameShop();
-
-		// start with cave as bgm...
-		bgmLibrary.playBGM("cave.wav");
-
-		while (!game.isGameOver(maze) && !exit.equalsIgnoreCase("q")) {
-			String cmd = game.getCommand(input);
+		while (!game.isGameOver() && !exit.equalsIgnoreCase("q")) {
+			String cmd = game.getCommand();
+			boolean moved = false;
 			if (cmd.equalsIgnoreCase("map")) {
-				System.out.println("\nMAP:\n");
-				System.out.println(maze.toString());
-				game.navigate(maze);
-				sfxLibrary.playTrack("footsteps.wav");
-				game.initiateBattle(maze, bgmLibrary, sfxLibrary);
+				moved = game.navigate();
+				if (moved)
+					game.checkForBattle();
 			}// end if
 
 			else if (cmd.equalsIgnoreCase("status")) {
@@ -57,7 +26,7 @@ public class DDTester {
 			}// end else if
 
 			else if (cmd.equalsIgnoreCase("shop")) {
-				game.openShop(cmd);
+				game.openShop();
 			}// end else if
 
 			else if (cmd.equalsIgnoreCase("q"))

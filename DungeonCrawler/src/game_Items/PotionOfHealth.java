@@ -7,6 +7,6 @@ public class PotionOfHealth extends HealPotion {
 	public PotionOfHealth() {
 		this.setItemName(potionName);
 		this.setItemCost(potionCost);
-		this.setHealAmount(2);
+		this.setHealAmount(10);
 	}
 }

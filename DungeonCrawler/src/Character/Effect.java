@@ -28,10 +28,10 @@ public abstract class Effect {
 	}
 
 	protected void apply(GameCharacter target) {
-		
-		if(target.addEffect(this)){
-		
-			this.affected= target;
+
+		if (target.addEffect(this)) {
+
+			this.affected = target;
 			this.onApply(target);
 		}
 	}

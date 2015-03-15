@@ -1,25 +1,26 @@
 package Character;
 
+import java.util.ArrayList;
 import java.util.Random;
 
-public class Vampire extends Monster {
+public class Dragon extends Monster {
 
-	public Vampire() {
+	public Dragon() {
 
-		this.name = "Vampire";
+		this.name = "Dragon";
 		this.profession = "Monster";
-		this.race = "Vampire";
+		this.race = "Dragon";
 
 		this.stats = new StatsObject(this);
 
 		this.stats.setLevel(1);
 		this.stats.setExp(0);
-		this.expValue = 15;
+		this.expValue = 100;
 
-		this.stats.setStr(11);
-		this.stats.setDex(10);
-		this.stats.setWis(9);
-		this.stats.setVit(9);
+		this.stats.setStr(18);
+		this.stats.setDex(15);
+		this.stats.setWis(12);
+		this.stats.setVit(20);
 		this.stats.setMaxHP(calculateMaxHP());
 		this.stats.setCurrentHP(this.stats.getMaxHP());
 
@@ -40,12 +41,16 @@ public class Vampire extends Monster {
 
 			double val = roll.nextDouble();
 
-			if (val >= .5) {
+			if (val >= .8) {
+				this.breatheFire(this.currentCombat.getHeroes());
+			}
 
-				int choice = roll
-						.nextInt(this.currentCombat.getHeroes().size());
-				this.drain(this.currentCombat.getHeroes().get(choice));
-			} else {
+			else if (val >= .5 && val <= .8) {
+
+				this.tailAttack(this.currentCombat.getHeroes());
+			}// end else if
+
+			else {
 
 				int choice = roll
 						.nextInt(this.currentCombat.getHeroes().size());
@@ -54,36 +59,39 @@ public class Vampire extends Monster {
 		}
 	}
 
-	public void drain(GameCharacter target) {
-		System.out.println(this.getName() + " attempts to suck "
-				+ target.getName() + "'s blood...");
-		if (this.calculateHitChance(target)) {
+	public void breatheFire(ArrayList<GameCharacter> heroes) {
 
+		System.out.println("embers emit from the " + this.getName()
+				+ " mouth...");
+		this.getSFXLib().playTrack("fire.wav");
+		for (GameCharacter target : heroes) {
 			double damage = this.calculateDamage() - 1;
-			if (damage <= 0) {
+			if (damage <= 0)
 				damage = 1;
-			}
-
-			double currentHP = this.getStats().getCurrentHP();
-			double maxHP = this.getStats().getMaxHP();
-
-			if (currentHP + damage > maxHP)
-				this.getStats().setCurrentHP(maxHP);
-			else
-				this.getStats().setCurrentHP(currentHP + damage);
-
-			System.out.println(this.name + " drains " + target.getName()
-					+ " for " + damage + " hitpoints!");
+			System.out.println("The " + this.getName() + " breathes fire and "
+					+ target.getName() + " receives " + damage + " damage!");
 			target.getSFXLib().playTrack("hurt.wav");
-			target.stats.setCurrentHP(target.stats.getCurrentHP() - damage);
 
-		}// end if
+		}// end for
 
-		else
-			System.out.println(target.getName()
-					+ " successfully wards off the " + this.getName());
+	}// end breatheFire
 
-	}// end drain
+	public void tailAttack(ArrayList<GameCharacter> heroes) {
+
+		System.out.println("The " + this.getName()
+				+ " sweeps its barbed tail across the floor...");
+		this.getSFXLib().playTrack("rumble.wav");
+		for (GameCharacter target : heroes) {
+			double damage = this.calculateDamage() - 1;
+			if (damage <= 0)
+				damage = 1;
+			System.out.println(target.getName() + "'receives " + damage
+					+ " damage!");
+			target.getSFXLib().playTrack("hurt");
+
+		}// end for
+
+	}// end breatheFire
 
 	public void levelUpStats() {
 

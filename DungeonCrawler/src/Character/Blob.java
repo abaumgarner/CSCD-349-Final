@@ -8,7 +8,7 @@ public class Blob extends Monster {
 
 		this.name = "Blob";
 		this.profession = "Monster";
-		this.race = "Ameba";
+		this.race = "Blob";
 
 		this.stats = new StatsObject(this);
 
@@ -19,7 +19,7 @@ public class Blob extends Monster {
 		this.stats.setStr(6);
 		this.stats.setDex(4);
 		this.stats.setWis(3);
-		this.stats.setVit(4);
+		this.stats.setVit(3);
 		this.stats.setMaxHP(calculateMaxHP());
 		this.stats.setCurrentHP(this.stats.getMaxHP());
 
@@ -55,13 +55,13 @@ public class Blob extends Monster {
 		System.out.println(this.name + " begins to split itself in two...");
 		GameCharacter blobOffspring = new Blob();
 		int currentLevel = this.getStats().getLevel();
-		if(currentLevel > 1)
-			blobOffspring.getStats().setLevel(currentLevel-1);
-		
+		if (currentLevel > 1)
+			blobOffspring.getStats().setLevel(currentLevel - 1);
+
 		this.currentCombat.getMonsters().add(blobOffspring);
+		this.getSFXLib().playTrack("multiply.wav");
 		System.out.println("A " + blobOffspring.getName() + " emerges!");
-		
-	}// end earthQuake
+	}// end multiplySelf
 
 	public void levelUpStats() {
 
@@ -81,7 +81,7 @@ public class Blob extends Monster {
 
 		if (this.currentCombat != null
 				&& this.currentCombat.getTurnOrder() != null) {
-
+			this.getSFXLib().playTrack("die.wav");
 			System.out.println(this.name
 					+ " has been slain, awarding the party " + this.expValue
 					+ " experience points!");
@@ -97,4 +97,3 @@ public class Blob extends Monster {
 
 	}
 }
-

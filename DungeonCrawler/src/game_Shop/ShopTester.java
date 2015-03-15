@@ -1,6 +1,6 @@
 package game_Shop;
 
-import game_Items.GameItem;
+import game_Items.HealPotion;
 
 import java.util.Scanner;
 
@@ -16,7 +16,7 @@ public class ShopTester {
 		System.out.print("Choice: ");
 		int choice = kb.nextInt();
 
-		GameItem item = shop.getShopItem(choice);
+		HealPotion item = shop.getShopItem(choice);
 
 		System.out.println(item + " was purchased from the shop for "
 				+ item.getCost() + " gold.");
@@ -30,5 +30,6 @@ public class ShopTester {
 
 		System.out.println(item + " was purchased from the shop for "
 				+ item.getCost() + " gold.");
+		kb.close();
 	}
 }
