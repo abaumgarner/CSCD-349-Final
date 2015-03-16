@@ -17,10 +17,10 @@ public class Warrior extends Hero {
 		this.stats.setLevel(1);
 		this.stats.setExp(0);
 
-		this.stats.setStr(12);
+		this.stats.setStr(14);
 		this.stats.setDex(10);
 		this.stats.setWis(8);
-		this.stats.setVit(10);
+		this.stats.setVit(11);
 		this.stats.setMaxHP(calculateMaxHP());
 		this.stats.setCurrentHP(this.stats.getMaxHP());
 

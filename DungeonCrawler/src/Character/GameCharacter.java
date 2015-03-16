@@ -14,6 +14,7 @@ public abstract class GameCharacter implements Comparable<GameCharacter> {
 	protected ArrayList<Effect> effectsList = new ArrayList<Effect>();
 	protected SFXLibrary sfxLib = new SFXLibrary();
 	protected Combat currentCombat;
+	protected int wallet;
 
 	protected abstract void levelUpStats();
 
@@ -53,7 +54,15 @@ public abstract class GameCharacter implements Comparable<GameCharacter> {
 	}
 
 	public void heal(int num) {
-		this.stats.heal(num);
+		
+		double health = this.stats.getCurrentHP() + num;
+		
+		if(health > this.stats.getMaxHP()){
+			
+			health = this.stats.getMaxHP();
+		}
+		
+		this.stats.setCurrentHP(health);
 	}
 
 	public String getRace() {
@@ -238,6 +247,7 @@ public abstract class GameCharacter implements Comparable<GameCharacter> {
 	public void dies() {
 
 		System.out.println(this.name + " has been slain!");
+		this.effectsList = new ArrayList<Effect>();
 		this.isAlive = false;
 	}
 
@@ -276,6 +286,10 @@ public abstract class GameCharacter implements Comparable<GameCharacter> {
 
 		return this.profession;
 
+	}
+	
+	public void addGold(int amount){
+		this.wallet += amount;
 	}
 
 }

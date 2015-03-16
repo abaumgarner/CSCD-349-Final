@@ -19,7 +19,7 @@ public class Mage extends Hero {
 
 		this.stats.setStr(10);
 		this.stats.setDex(10);
-		this.stats.setWis(12);
+		this.stats.setWis(14);
 		this.stats.setVit(8);
 		this.stats.setMaxHP(calculateMaxHP());
 		this.stats.setCurrentHP(this.stats.getMaxHP());

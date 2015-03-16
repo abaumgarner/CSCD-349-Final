@@ -21,9 +21,10 @@ public class Round {
 
 				for (int i = 0; i < this.currentCombat.getTurnOrder().size(); i++) {
 					// do turns
+					this.currentCombat.checkForDeaths();
 					if (currentCombat.stillAlive(currentCombat.getHeroes())
 							&& currentCombat.stillAlive(currentCombat
-									.getHeroes())) {
+									.getMonsters())) {
 
 						if (this.currentCombat.getTurnOrder().get(i).isAlive) {
 

@@ -197,7 +197,7 @@ public class GameSession {
 		for (GameCharacter member : party.getPartyMembers()) {
 			if (member.getName().equalsIgnoreCase(characterToHeal)) {
 				int recoverAmount = item.getHealthAmount();
-				member.getStats().heal(recoverAmount);
+				member.heal(recoverAmount);
 				System.out
 						.println(member.getName() + " recovered some health.");
 			}// end if

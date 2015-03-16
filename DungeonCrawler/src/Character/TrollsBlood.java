@@ -25,6 +25,11 @@ public class TrollsBlood extends Effect {
 		
 		double health = (1 + this.affected.stats.getVit()) - (10 + (this.affected.stats.getLevel() - 1));
 		
+		if(health > this.affected.stats.getMaxHP()){
+			
+			health = this.affected.stats.getMaxHP();
+		}
+		
 		this.affected.stats.setCurrentHP(this.affected.stats.getCurrentHP()+health);
 		
 		System.out.println("The "+this.affected.getName()+"'s magical blood heals it for "+health+" hit points!");

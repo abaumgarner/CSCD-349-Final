@@ -20,8 +20,8 @@ public class Druid extends Hero {
 
 		this.stats.setStr(10);
 		this.stats.setDex(8);
-		this.stats.setWis(12);
-		this.stats.setVit(10);
+		this.stats.setWis(13);
+		this.stats.setVit(11);
 		this.stats.setMaxHP(calculateMaxHP());
 		this.stats.setCurrentHP(this.stats.getMaxHP());
 

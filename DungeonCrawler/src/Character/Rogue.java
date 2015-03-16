@@ -17,8 +17,8 @@ public class Rogue extends Hero {
 		this.stats.setLevel(1);
 		this.stats.setExp(0);
 
-		this.stats.setStr(10);
-		this.stats.setDex(12);
+		this.stats.setStr(11);
+		this.stats.setDex(13);
 		this.stats.setWis(10);
 		this.stats.setVit(8);
 		this.stats.setMaxHP(calculateMaxHP());

@@ -16,6 +16,7 @@ public class EarthGolem extends Monster {
 		this.stats.setLevel(1);
 		this.stats.setExp(0);
 		this.expValue = 35;
+		this.goldValue = 12;
 
 		this.stats.setStr(12);
 		this.stats.setDex(8);
@@ -90,26 +91,5 @@ public class EarthGolem extends Monster {
 		this.stats.setStr(this.stats.getStr() + strMod);
 		this.stats.setWis(this.stats.getWis() + wisMod);
 		this.stats.setVit(this.stats.getVit() + vitMod);
-	}
-
-	@Override
-	public void dies() {
-
-		if (this.currentCombat != null
-				&& this.currentCombat.getTurnOrder() != null) {
-
-			System.out.println(this.name
-					+ " has been slain, awarding the party " + this.expValue
-					+ " experience points!");
-			this.isAlive = false;
-
-			for (int i = 0; i < this.currentCombat.getHeroes().size(); i++) {
-
-				GameCharacter character = this.currentCombat.getHeroes().get(i);
-				character.stats.setExp(character.stats.getExp() + expValue);
-			}
-
-		}
-
 	}
 }

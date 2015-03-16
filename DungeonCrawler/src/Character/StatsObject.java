@@ -69,14 +69,6 @@ public class StatsObject {
 		this.currentHP = hp;
 	}
 
-	public void heal(int num) {
-
-		if ((this.currentHP + num) > this.maxHP)
-			this.currentHP = this.maxHP;
-		else
-			this.currentHP += num;
-	}
-
 	public void setMaxHP(double hp) {
 
 		this.maxHP = hp;

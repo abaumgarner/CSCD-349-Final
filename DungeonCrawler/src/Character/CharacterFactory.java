@@ -8,8 +8,10 @@ public class CharacterFactory {
 	private String[] heroTypes = { "", "Druid", "Mage", "Rogue", "Warrior" };
 
 	// update this array of monster types for randomMonster method
-	private String[] monsterTypes = { "Blob", "Dragon", "EarthGolem", "Goblin",
-			"Vampire" };
+	private String[] monsterTypes = { "Blob", "EarthGolem", "Goblin",
+			"Vampire", "Troll" };
+	
+	private String[] bossMonsterTypes = {"Dragon"};
 
 	public GameCharacter spawnCharacter(String classification) {
 		GameCharacter character = null;
@@ -38,20 +40,26 @@ public class CharacterFactory {
 			character = new Blob();
 		}// end else if
 
-		else if (classification.equalsIgnoreCase("Dragon")) {
-			character = new Dragon();
-		}// end else if
-
 		else if (classification.equalsIgnoreCase("EarthGolem")) {
 			character = new EarthGolem();
 		}// end else if
 
 		else if (classification.equalsIgnoreCase("Goblin")) {
 			character = new Goblin();
-		}// end if
+		}// end else if
 
 		else if (classification.equalsIgnoreCase("Vampire")) {
 			character = new Vampire();
+		}// end else if
+		
+		else if (classification.equalsIgnoreCase("Troll")) {
+			character = new Troll();
+		}// end else if
+		/*---------------------------------------------------------
+						BOSS MONSTER CLASSES	
+		/*---------------------------------------------------------*/
+		else if (classification.equalsIgnoreCase("Dragon")) {
+			character = new Dragon();
 		}// end else if
 
 		/*---------------------------------------------------------*/
@@ -78,10 +86,16 @@ public class CharacterFactory {
 		int index = this.randomNumberGenerator(monsterTypes.length - 1);
 		return (Monster) this.spawnCharacter(monsterTypes[index]);
 	}// end randomMonster
+	
+	public Monster randomBossMonster(){
+		int index = this.randomNumberGenerator(bossMonsterTypes.length - 1);
+		return (Monster) this.spawnCharacter(bossMonsterTypes[index]);
+	}
 
 	private int randomNumberGenerator(int totalMonsterTypes) {
 		Random random = new Random();
 		int randomNum = random.nextInt(totalMonsterTypes + 1);
 		return randomNum;
 	}// end randomNumberGenerator
+	
 }// end class

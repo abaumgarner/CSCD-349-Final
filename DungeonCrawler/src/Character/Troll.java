@@ -16,6 +16,7 @@ public class Troll extends Monster {
 	      this.stats.setLevel(1);
 	      this.stats.setExp(0);
 	      this.expValue = 50;
+	      this.goldValue = 20;
 	   
 	      this.stats.setStr(12);
 	      this.stats.setDex(12);

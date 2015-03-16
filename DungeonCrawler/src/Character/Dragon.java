@@ -8,15 +8,15 @@ public class Dragon extends Monster {
 	public Dragon() {
 
 		this.name = "Dragon";
-		this.profession = "Monster";
+		this.profession = "Boss Monster";
 		this.race = "Dragon";
 
 		this.stats = new StatsObject(this);
 
 		this.stats.setLevel(1);
 		this.stats.setExp(0);
-		this.expValue = 100;
-
+		this.expValue = 400;
+		this.goldValue = 1000;
 		this.stats.setStr(18);
 		this.stats.setDex(15);
 		this.stats.setWis(12);
@@ -29,7 +29,7 @@ public class Dragon extends Monster {
 
 	public double calculateMaxHP() {
 
-		return 8 + this.stats.getVit() + (2 * this.stats.getLevel());
+		return 12 + this.stats.getVit() + (7 * this.stats.getLevel());
 
 	}
 
@@ -65,13 +65,24 @@ public class Dragon extends Monster {
 				+ " mouth...");
 		this.getSFXLib().playTrack("fire.wav");
 		for (GameCharacter target : heroes) {
-			double damage = this.calculateDamage() - 1;
-			if (damage <= 0)
-				damage = 1;
-			System.out.println("The " + this.getName() + " breathes fire and "
-					+ target.getName() + " receives " + damage + " damage!");
-			target.getSFXLib().playTrack("hurt.wav");
-
+			
+			if(this.calculateHitChance(target)){
+				
+				double damage = this.calculateMagicDamage();
+				
+				if (damage <= 0)
+					damage = 1;
+				
+				System.out.println("The " + this.getName() + " breathes fire and "
+						+ target.getName() + " receives " + damage + " damage!");
+				target.getSFXLib().playTrack("hurt.wav");
+				
+				if(this.calculateHitChance(target)){
+					Burn burn = new Burn();
+					burn.apply(target);
+				}
+				
+			}//end if
 		}// end for
 
 	}// end breatheFire
@@ -95,35 +106,14 @@ public class Dragon extends Monster {
 
 	public void levelUpStats() {
 
-		double dexMod = 1.5;
-		double strMod = 1.0;
-		double wisMod = 1.0;
-		double vitMod = .5;
-
-		this.stats.setDex(this.stats.getDex() + dexMod);
+		double strMod = 2.0;
+		double wisMod = 1.5;
+		double dexMod = 1.0;
+		double vitMod = 1.0;
+		
 		this.stats.setStr(this.stats.getStr() + strMod);
 		this.stats.setWis(this.stats.getWis() + wisMod);
+		this.stats.setDex(this.stats.getDex() + dexMod);
 		this.stats.setVit(this.stats.getVit() + vitMod);
-	}
-
-	@Override
-	public void dies() {
-
-		if (this.currentCombat != null
-				&& this.currentCombat.getTurnOrder() != null) {
-			this.getSFXLib().playTrack("die.wav");
-			System.out.println(this.name
-					+ " has been slain, awarding the party " + this.expValue
-					+ " experience points!");
-			this.isAlive = false;
-
-			for (int i = 0; i < this.currentCombat.getHeroes().size(); i++) {
-
-				GameCharacter character = this.currentCombat.getHeroes().get(i);
-				character.stats.setExp(character.stats.getExp() + expValue);
-			}
-
-		}
-
 	}
 }

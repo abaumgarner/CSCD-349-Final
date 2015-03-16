@@ -15,7 +15,8 @@ public class Vampire extends Monster {
 		this.stats.setLevel(1);
 		this.stats.setExp(0);
 		this.expValue = 15;
-
+		this.goldValue = 8;
+		
 		this.stats.setStr(11);
 		this.stats.setDex(10);
 		this.stats.setWis(9);
@@ -96,26 +97,5 @@ public class Vampire extends Monster {
 		this.stats.setStr(this.stats.getStr() + strMod);
 		this.stats.setWis(this.stats.getWis() + wisMod);
 		this.stats.setVit(this.stats.getVit() + vitMod);
-	}
-
-	@Override
-	public void dies() {
-
-		if (this.currentCombat != null
-				&& this.currentCombat.getTurnOrder() != null) {
-			this.getSFXLib().playTrack("die.wav");
-			System.out.println(this.name
-					+ " has been slain, awarding the party " + this.expValue
-					+ " experience points!");
-			this.isAlive = false;
-
-			for (int i = 0; i < this.currentCombat.getHeroes().size(); i++) {
-
-				GameCharacter character = this.currentCombat.getHeroes().get(i);
-				character.stats.setExp(character.stats.getExp() + expValue);
-			}
-
-		}
-
 	}
 }
