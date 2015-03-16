@@ -1,5 +1,7 @@
 package Character;
 
+import java.util.ArrayList;
+
 public abstract class Monster extends GameCharacter {
 
 	protected int expValue;
@@ -16,8 +18,10 @@ public abstract class Monster extends GameCharacter {
 			System.out.println(this.name
 					+ " has been slain, awarding the party " + this.expValue
 					+ " experience points and "+ this.goldValue +" gold!");
+			
 			this.isAlive = false;
-
+			this.effectsList = new ArrayList<Effect>();
+			
 			for (int i = 0; i < this.currentCombat.getHeroes().size(); i++) {
 
 				GameCharacter character = this.currentCombat.getHeroes().get(i);
@@ -28,5 +32,4 @@ public abstract class Monster extends GameCharacter {
 		}
 
 	}
-
 }

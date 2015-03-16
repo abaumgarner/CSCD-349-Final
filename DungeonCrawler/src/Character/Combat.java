@@ -59,6 +59,9 @@ public class Combat {
 				this.heroes.get(i).currentCombat = null;
 				this.heroes.get(i).effectsList = new ArrayList<Effect>();
 			}
+			
+			this.heroes = null;
+			this.monsters = null;
 
 			return true;
 
@@ -121,30 +124,27 @@ public class Combat {
 
 	public void checkForDeaths() {
 
+		//check through the heroes and monsters, to see if their HP is 0 or less.
 		for (int i = 0; i < this.heroes.size(); i++) {
-			if (this.heroes.get(i).stats.getCurrentHP() <= 0) {
+			if (this.heroes.get(i).isAlive && this.heroes.get(i).stats.getCurrentHP() <= 0) {
+				
+				//make the hero die, then remove them from the turn order
 				this.heroes.get(i).dies();
 				this.heroes.remove(i);
-
-				for (int j = 0; j < this.turnOrder.size(); j++) {
-
-					this.turnOrder.remove(j);
-					break;
-
-				}
 			}
 		}
-
+		//same thing but for monsters.
 		for (int i = 0; i < this.monsters.size(); i++) {
-			if (this.monsters.get(i).stats.getCurrentHP() <= 0) {
+			if (this.monsters.get(i).isAlive && this.monsters.get(i).stats.getCurrentHP() <= 0) {
+				
 				this.monsters.get(i).dies();
 				this.monsters.remove(i);
-
-				for (int j = 0; j < this.turnOrder.size(); j++) {
-
-					this.turnOrder.remove(j);
-					break;
-				}
+			}
+		}
+		
+		for(int i = 0; i < this.turnOrder.size(); i++){
+			if(!this.turnOrder.get(i).isAlive){
+				this.turnOrder.remove(i);
 			}
 		}
 

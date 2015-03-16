@@ -70,24 +70,4 @@ public class Troll extends Monster {
 		tb.apply(target);
 		return tb;
 	}
-	
-	@Override
-	public void dies(){
-		
-		if(this.currentCombat != null && this.currentCombat.getTurnOrder() != null){
-			
-			
-			System.out.println(this.name + " has been slain, awarding the party "+this.expValue+" experience points!");
-			this.isAlive = false;
-			
-			for(int i = 0; i < this.currentCombat.getHeroes().size(); i++){
-				
-				GameCharacter character = this.currentCombat.getHeroes().get(i);
-				character.stats.setExp(character.stats.getExp()+expValue);
-			}
-			
-		}
-		
-	}
-
 }

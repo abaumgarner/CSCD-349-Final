@@ -101,31 +101,23 @@ public class Warrior extends Hero {
 						|| attackInput.toLowerCase().equals("attack")) {
 
 					correct = true;
-					System.out
-							.println("Who do you wish to attack? (Choose a number)");
-
-					for (int i = 0; i < this.currentCombat.getMonsters().size(); i++) {
-
-						System.out.println((i + 1)
-								+ ") "
-								+ this.currentCombat.getMonsters().get(i)
-										.getName()
-								+ ": "
-								+ this.currentCombat.getMonsters().get(i).stats
-										.getCurrentHP()
-								+ "/"
-								+ this.currentCombat.getMonsters().get(i).stats
-										.getMaxHP() + " HP ");
-
-					}
+					
+					System.out.println("Who do you wish to attack? (Choose a number)");
+					promptToAttack();
 
 					while (true) {
 						try {
 
 							int choice = Integer.parseInt(kb.nextLine());
-							this.basicAttack(this.currentCombat.getMonsters()
-									.get(choice - 1));
-							break;
+							if(this.currentCombat.getMonsters().get(choice - 1).isAlive){
+								
+								this.basicAttack(this.currentCombat.getMonsters()
+										.get(choice - 1));
+								break;
+							}
+							else{
+								throw new Exception();
+							}
 						} catch (Exception e) {
 							System.out
 									.println("You must enter a valid number.");
@@ -140,26 +132,20 @@ public class Warrior extends Hero {
 					System.out
 							.println("Who do you wish to cripple? (Choose a number)");
 
-					for (int i = 0; i < this.currentCombat.getMonsters().size(); i++) {
-
-						System.out.println((i + 1)
-								+ ") "
-								+ this.currentCombat.getMonsters().get(i)
-										.getName()
-								+ ": "
-								+ this.currentCombat.getMonsters().get(i).stats
-										.getCurrentHP()
-								+ "/"
-								+ this.currentCombat.getMonsters().get(i).stats
-										.getMaxHP() + " HP ");
-					}
+					promptToAttack();
 
 					while (true) {
 						try {
 							int choice = Integer.parseInt(kb.nextLine());
-							this.cripple(this.currentCombat.getMonsters().get(
-									choice - 1));
-							break;
+							if(this.currentCombat.getMonsters().get(choice - 1).isAlive){
+								
+								this.cripple(this.currentCombat.getMonsters().get(
+										choice - 1));
+								break;
+							}
+							else{
+								throw new Exception();
+							}
 						} catch (Exception e) {
 							System.out
 									.println("You must enter a valid number.");

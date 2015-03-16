@@ -17,11 +17,12 @@ public class Round {
 			// iterate through characters in combat and give them a turn
 			if (this.currentCombat.getTurnOrder() != null) {
 
-				currentCombat.getHud().printHUD();
+				
 
 				for (int i = 0; i < this.currentCombat.getTurnOrder().size(); i++) {
 					// do turns
-					this.currentCombat.checkForDeaths();
+					currentCombat.getHud().printHUD();
+					
 					if (currentCombat.stillAlive(currentCombat.getHeroes())
 							&& currentCombat.stillAlive(currentCombat
 									.getMonsters())) {
@@ -29,7 +30,7 @@ public class Round {
 						if (this.currentCombat.getTurnOrder().get(i).isAlive) {
 
 							this.currentCombat.getTurnOrder().get(i).doTurn();
-							this.currentCombat.checkForDeaths();
+							
 						}
 					}
 				}

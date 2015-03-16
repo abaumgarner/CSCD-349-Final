@@ -12,6 +12,8 @@ public class CombatTester {
 		Goblin gob = new Goblin();
 		Goblin gob2 = new Goblin();
 		Goblin gob3 = new Goblin();
+		Troll troll2 = new Troll();
+		Vampire drac = new Vampire();
 
 		warr2.setName("Two");
 		warr3.setName("Three");
@@ -42,11 +44,11 @@ public class CombatTester {
 
 		gob2.setName("TESTINGTESTING");
 		// heroes.add(warr);
-		// heroes.add(mage);
+		heroes.add(rog);
 		heroes.add(druid);
 
-		monsters.add(gob);
-		monsters.add(gob2);
+		monsters.add(drac);
+		monsters.add(troll2);
 		// monsters.add(gob3);
 
 		Combat combat2 = new Combat(heroes, monsters);

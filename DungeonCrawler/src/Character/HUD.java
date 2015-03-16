@@ -10,7 +10,9 @@ public class HUD {
 	}
 
 	public void printHUD() {
-
+		
+		System.out.println("");
+		
 		System.out.printf("Party: %-60sMonsters:\n", "");
 		for (int i = 0; i < Math.max(this.currentCombat.getHeroes().size(),
 				this.currentCombat.getMonsters().size()); i++) {
@@ -19,13 +21,17 @@ public class HUD {
 			String monsterString = "";
 			if (i < this.currentCombat.getHeroes().size()) {
 
-				heroString = printHero(this.currentCombat.getHeroes().get(i));
+				if(this.currentCombat.getHeroes().get(i).isAlive){
+					heroString = printHero(this.currentCombat.getHeroes().get(i));
+				}
 			}
 
 			if (i < this.currentCombat.getMonsters().size()) {
-
-				monsterString = printMonster(this.currentCombat.getMonsters()
-						.get(i));
+				
+				if(this.currentCombat.getMonsters().get(i).isAlive){
+					monsterString = printMonster(this.currentCombat.getMonsters()
+							.get(i));
+				}
 			}
 
 			if (heroString.isEmpty()) {

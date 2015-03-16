@@ -70,28 +70,21 @@ public class Druid extends Hero {
 					System.out
 							.println("Who do you wish to attack? (Choose a number)");
 
-					for (int i = 0; i < this.currentCombat.getMonsters().size(); i++) {
-
-						System.out.println((i + 1)
-								+ ") "
-								+ this.currentCombat.getMonsters().get(i)
-										.getName()
-								+ ": "
-								+ this.currentCombat.getMonsters().get(i).stats
-										.getCurrentHP()
-								+ "/"
-								+ this.currentCombat.getMonsters().get(i).stats
-										.getMaxHP() + " HP ");
-
-					}
+					promptToAttack();
 
 					while (true) {
 						try {
 
 							int choice = Integer.parseInt(kb.nextLine());
-							this.magicAttack(this.currentCombat.getMonsters()
+							if(this.currentCombat.getMonsters().get(choice - 1).isAlive){
+								
+								this.magicAttack(this.currentCombat.getMonsters()
 									.get(choice - 1));
-							break;
+								break;
+							}
+							else{
+								throw new Exception();
+							}
 						} catch (Exception e) {
 							System.out
 									.println("You must enter a valid number.");
@@ -106,26 +99,21 @@ public class Druid extends Hero {
 					System.out
 							.println("Who do you wish to mend? (Choose a number)");
 
-					for (int i = 0; i < this.currentCombat.getHeroes().size(); i++) {
-
-						System.out.println((i + 1)
-								+ ") "
-								+ this.currentCombat.getHeroes().get(i)
-										.getName()
-								+ ": "
-								+ this.currentCombat.getHeroes().get(i).stats
-										.getCurrentHP()
-								+ "/"
-								+ this.currentCombat.getHeroes().get(i).stats
-										.getMaxHP() + " HP ");
-					}
+					promptToHeal();
 
 					while (true) {
 						try {
+							
 							int choice = Integer.parseInt(kb.nextLine());
-							this.mendingTouch(this.currentCombat.getHeroes()
+							if(this.currentCombat.getHeroes().get(choice - 1).isAlive){
+								
+								this.mendingTouch(this.currentCombat.getHeroes()
 									.get(choice - 1));
-							break;
+								break;
+							}
+							else{
+								throw new Exception();
+							}
 						} catch (Exception e) {
 							System.out
 									.println("You must enter a valid number.");
