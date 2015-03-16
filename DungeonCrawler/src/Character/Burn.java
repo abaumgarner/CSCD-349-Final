@@ -25,6 +25,8 @@ public class Burn extends Effect {
 	public void tick(){
 		
 		double damage = (this.duration + (this.affected.stats.getLevel() - 1));
+		
+		this.affected.stats.setCurrentHP(this.affected.stats.getCurrentHP() - damage);
 	}
 	
 	@Override

@@ -6,7 +6,7 @@ public class Freeze extends Effect {
 
 		this.duration = 6;
 		this.name = "Freeze";
-		this.name = "A blast of frozen magic that leaves the target frozen solid!";
+		this.description = "A blast of frozen magic that leaves the target frozen solid!";
 	}
 
 	@Override
@@ -50,6 +50,8 @@ public class Freeze extends Effect {
 				message = affected.getName()
 						+ " shatters the ice and joins the fray!";
 			}
+			
+			System.out.println(message);
 		}
 	}
 

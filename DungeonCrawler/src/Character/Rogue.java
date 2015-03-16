@@ -40,9 +40,9 @@ public class Rogue extends Hero {
 
 		if (this.calculateHitChance(target)) {
 
-			double damage = this.calculateDamage() - 2;
-			if (damage < 0) {
-				damage = 0;
+			double damage = this.calculateDamage();
+			if (damage < 1) {
+				damage = 1;
 			}
 
 			System.out.println(this.getName()
